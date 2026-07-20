@@ -1,0 +1,52 @@
+generated: '2026-07-18'
+method: searched
+source: https://developer.dreamdata.io/server-side/server-side-tracking/ + https://developer.dreamdata.io/mcp/mcp-server/
+summary:
+  types:
+  - http
+  - oauth2
+  - openIdConnect
+  api_key_in:
+  - header
+  oauth2_flows:
+  - authorizationCode
+schemes:
+- name: TrackingApiKeyBasic
+  type: http
+  scheme: basic
+  applies_to: Event Tracking API (https://api.dreamdata.cloud/v1/batch)
+  description: >-
+    HTTP Basic auth carrying the source API key as the username with an empty password,
+    base64-encoded as "apiKey:". Used for server-side batch event submission.
+  docs: https://developer.dreamdata.io/server-side/server-side-tracking/
+- name: MCPOAuth21
+  type: oauth2
+  scheme: authorizationCode+PKCE
+  pkce: S256
+  applies_to: MCP server (https://mcp.dreamdata.io/mcp)
+  authorization_endpoint: https://authenticate.dreamdata.io/oauth/2.1/authorize
+  token_endpoint: https://authenticate.dreamdata.io/oauth/2.1/token
+  introspection_endpoint: https://authenticate.dreamdata.io/oauth/2.1/introspect
+  registration_endpoint: https://authenticate.dreamdata.io/oauth/2.1/register
+  scopes:
+  - read
+  - reports:write
+  docs: https://developer.dreamdata.io/mcp/mcp-server/
+- name: OpenIDConnect
+  type: openIdConnect
+  issuer: https://authenticate.dreamdata.io
+  openid_configuration: https://authenticate.dreamdata.io/.well-known/openid-configuration
+  id_token_signing: RS256
+  scopes:
+  - openid
+  - email
+  - profile
+  note: PropelAuth-backed OIDC used for app/console sign-in.
+- name: WebhookHMAC
+  type: signature
+  algorithm: HMAC-SHA256
+  applies_to: Outbound audience webhook syncs
+  description: >-
+    Dreamdata appends an HMAC-SHA256 signature to outbound webhook sync requests; the
+    signing key is retrievable per webhook sync so recipients can verify authenticity.
+  docs: https://docs.dreamdata.io/article/mdebkprrgi-webhook-syncs
