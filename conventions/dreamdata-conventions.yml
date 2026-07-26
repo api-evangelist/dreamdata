@@ -1,0 +1,42 @@
+generated: '2026-07-18'
+method: searched
+source: https://developer.dreamdata.io/server-side/server-side-tracking/ + https://developer.dreamdata.io/client-side/api/
+api: Dreamdata Event Tracking API
+authentication:
+  server_side: HTTP Basic (source API key as username, empty password), base64-encoded
+  client_side: Browser JavaScript library initialized with the source id
+  mcp: OAuth 2.1 authorization code + PKCE (S256)
+  cross_link: authentication/dreamdata-authentication.yml
+event_model:
+  spec_family: Segment-compatible (track, page, identify, group, alias)
+  batch_endpoint: POST https://api.dreamdata.cloud/v1/batch
+  content_type: application/json
+  max_request_size: 500kb
+  required_event_fields:
+  - type
+  - messageId
+  - userId or anonymousId
+  - timestamp
+deduplication:
+  field: messageId
+  description: >-
+    Each event carries a unique messageId (UUID). As a Segment-compatible spec, messageId
+    is the per-event unique identifier used to distinguish events; Dreamdata does not
+    document a dedicated idempotency-key retention contract, so no Idempotency pointer is
+    claimed.
+timestamps:
+  format: ISO 8601
+identity:
+  user: userId / anonymousId
+  company: group (groupId) for account-based B2B analytics
+  alias: alias links an anonymous identity to a known userId (previousId)
+versioning:
+  scheme: uri-path
+  current: v1
+  example: https://api.dreamdata.cloud/v1/batch
+outbound_webhooks:
+  signing: HMAC-SHA256 signature appended to each request
+  operations: [Insert, Upsert]
+  cross_link: asyncapi/dreamdata-webhook-syncs.yml
+error_envelope:
+  note: Standard HTTP status codes; a structured problem+json error catalog is not published.

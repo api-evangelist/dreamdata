@@ -1,7 +1,15 @@
 aid: dreamdata
 name: Dreamdata
-description: Dreamdata is a company surfaced as a portfolio company of seedcamp and added to the API Evangelist
-  network as a stub for enrichment. This profile is a lead awaiting the enrichment pipeline.
+description: >-
+  Dreamdata is a B2B revenue attribution and go-to-market data platform founded in
+  2018 in Copenhagen. It connects every marketing and sales touchpoint — from anonymous
+  web visits and ad clicks to CRM opportunities and closed-won revenue — into one clean,
+  account-based customer journey data model. The platform delivers multi-touch attribution,
+  pipeline and revenue analytics, AI-powered audience building, and activation that syncs
+  audiences to ad networks and downstream tools. For developers Dreamdata exposes a
+  Segment-compatible event tracking API (client-side JavaScript and a server-side HTTP
+  batch endpoint), a data warehouse model, outbound webhook syncs, first-party Node.js and
+  Go SDKs, and a hosted remote MCP server secured with OAuth 2.1 PKCE for agent access.
 url: https://raw.githubusercontent.com/api-evangelist/dreamdata/refs/heads/main/apis.yml
 x-type: company
 x-source: vc-portfolio
@@ -9,12 +17,52 @@ x-backed-by:
 - seedcamp
 x-tier: stub
 x-tier-reason: portfolio-lead
+accessModel:
+  pricing: unknown
+  onboarding: self-serve
+  trial: false
+  try_now: false
+  public: false
+  label: Self-serve signup
+  confidence: medium
+  source:
+  - authentication
+  generated: '2026-07-22'
+  method: derived
 specificationVersion: '0.20'
 created: '2026-07-17'
-modified: '2026-07-17'
+modified: '2026-07-18'
+image: http://static1.squarespace.com/static/60880c8985e48a388d33bd16/t/6821cbca7c756751d5f1473a/1748866920123/Activation+and+Attribution+for+B2B+Marketing.png?format=1500w
 tags:
 - Company
-apis: []
+- B2B Attribution
+- Revenue Attribution
+- Marketing Analytics
+- Customer Journey
+- Event Tracking
+- Audience Activation
+- Analytics
+- MCP
+apis:
+- name: Dreamdata Event Tracking API
+  description: >-
+    Segment-compatible event tracking API for capturing B2B customer journey events.
+    Server-side events are POSTed as a batch to the HTTP endpoint with HTTP Basic auth
+    (source API key as username, empty password); a client-side JavaScript library exposes
+    track, page, identify, group, and alias methods. Payloads are limited to 500kb per
+    request and each event carries a unique messageId, a userId/anonymousId, and an ISO 8601
+    timestamp.
+  humanURL: https://developer.dreamdata.io/server-side/server-side-tracking/
+  baseURL: https://api.dreamdata.cloud
+  tags:
+  - Event Tracking
+  - Analytics
+  - B2B Attribution
+  properties:
+  - type: APIReference
+    url: https://developer.dreamdata.io/client-side/api/
+  - type: Documentation
+    url: https://developer.dreamdata.io/
 maintainers:
 - FN: Kin Lane
   email: kin@apievangelist.com
@@ -22,4 +70,67 @@ maintainers:
   email: info@apis.io
 common:
 - type: Website
-  url: http://dreamdata.io
+  url: https://dreamdata.io
+- type: DeveloperPortal
+  url: https://developer.dreamdata.io/
+- type: Documentation
+  url: https://docs.dreamdata.io/
+- type: APIReference
+  url: https://developer.dreamdata.io/client-side/api/
+- type: GettingStarted
+  url: https://developer.dreamdata.io/
+- type: Blog
+  url: https://dreamdata.io/blog
+- type: Support
+  url: https://dreamdata.io/contact
+- type: Pricing
+  url: https://dreamdata.io/pricing
+- type: SignUp
+  url: https://app.dreamdata.io/
+- type: TermsOfService
+  url: https://dreamdata.io/terms
+- type: PrivacyPolicy
+  url: https://dreamdata.io/privacy-policy
+- type: GitHubOrganization
+  url: https://github.com/dreamdata-io
+- type: StatusPage
+  url: https://status.dreamdata.io/
+- type: TrustCenter
+  url: https://trust.dreamdata.io/
+- type: Compliance
+  url: https://dreamdata.io/security
+- type: Security
+  url: https://dreamdata.io/security/bounty-program
+- type: VulnerabilityDisclosure
+  url: security/dreamdata-vulnerability-disclosure.yml
+- type: DomainSecurity
+  url: security/dreamdata-domain-security.yml
+- type: MCPServer
+  url: mcp/dreamdata-mcp.yml
+- type: LLMsTxt
+  url: llms/dreamdata-llms.txt
+- type: WellKnown
+  url: well-known/dreamdata-well-known.yml
+- type: Packages
+  url: packages/dreamdata-packages.yml
+- type: SDKs
+  url: packages/dreamdata-packages.yml
+- type: Authentication
+  url: authentication/dreamdata-authentication.yml
+- type: OAuthScopes
+  url: scopes/dreamdata-scopes.yml
+- type: Conventions
+  url: conventions/dreamdata-conventions.yml
+- type: Conformance
+  url: conformance/dreamdata-conformance.yml
+- type: Webhooks
+  url: asyncapi/dreamdata-webhook-syncs.yml
+- type: DataModel
+  url: data-model/dreamdata-data-model.yml
+- type: Lifecycle
+  url: lifecycle/dreamdata-lifecycle.yml
+x-enrichment:
+  date: '2026-07-19'
+  status: backfilled
+  pass: local-v1
+  note: backfilled from .gitignore signal + verified work evidence

@@ -1,0 +1,26 @@
+generated: '2026-07-18'
+method: searched
+source: https://mcp.dreamdata.io/ + https://authenticate.dreamdata.io/
+documents:
+- host: https://mcp.dreamdata.io
+  path: /.well-known/oauth-authorization-server
+  status: 200
+  file: dreamdata-mcp-oauth-authorization-server.json
+  note: RFC 8414 OAuth 2.1 authorization server metadata for the Dreamdata MCP server
+- host: https://authenticate.dreamdata.io
+  path: /.well-known/openid-configuration
+  status: 200
+  file: dreamdata-openid-configuration.json
+  note: OpenID Connect discovery document (PropelAuth-backed)
+- host: https://mcp.dreamdata.io
+  path: /.well-known/oauth-protected-resource
+  status: 404
+- host: https://api.dreamdata.cloud
+  path: /.well-known/security.txt
+  status: 404
+- host: https://dreamdata.io
+  path: /.well-known/security.txt
+  status: 404
+- host: https://api.dreamdata.cloud
+  path: /.well-known/api-catalog
+  status: 404

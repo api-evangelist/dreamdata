@@ -1,0 +1,33 @@
+generated: '2026-07-18'
+method: probed
+source: live DNS/TLS/HTTP probes of apis.yml + OpenAPI hosts
+hosts:
+- host: dreamdata.io
+  https: true
+  tls_version: TLSv1.3
+  cert_expires: Oct 13 19:43:19 2026 GMT
+  hsts: true
+  hsts_max_age: 15552000
+- host: developer.dreamdata.io
+  https: true
+  tls_version: TLSv1.3
+  cert_expires: Aug 29 18:32:18 2026 GMT
+  hsts: false
+- host: api.dreamdata.cloud
+  https: true
+  tls_version: TLSv1.3
+  cert_expires: Sep 30 20:08:36 2026 GMT
+  hsts: null
+domains:
+- domain: dreamdata.io
+  dnssec: true
+  caa: []
+  spf: true
+  dmarc: true
+  dmarc_policy: reject
+- domain: dreamdata.cloud
+  dnssec: true
+  caa: []
+  spf: true
+  dmarc: true
+  dmarc_policy: reject

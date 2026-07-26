@@ -1,0 +1,15 @@
+generated: '2026-07-18'
+method: searched
+source: https://status.dreamdata.io/ + https://developer.dreamdata.io/
+versioning:
+  scheme: uri-path
+  current: v1
+  example: https://api.dreamdata.cloud/v1/batch
+status_page: https://status.dreamdata.io/
+deprecation:
+  policy_url: null
+  sunset_header: null
+  note: No formal deprecation/Sunset-header policy is published.
+sla:
+  url: null
+deprecated_operations: []

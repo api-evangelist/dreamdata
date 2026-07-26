@@ -1,0 +1,45 @@
+generated: '2026-07-18'
+method: searched
+source: https://docs.dreamdata.io/article/mdebkprrgi-webhook-syncs
+spec_type: Webhooks
+surface: outbound audience webhook syncs (Audience Hub)
+description: >-
+  Dreamdata pushes audience data to a configured webhook URL as JSON. An initial sync sends
+  all existing audience records; ongoing syncs run daily after each data-modeling run for new
+  audience members. Destinations include Zapier, n8n, Clay, or any custom endpoint.
+delivery:
+  transport: HTTPS POST
+  content_type: application/json
+  signing: HMAC-SHA256 signature appended to each request; signing key retrievable per sync
+  custom_headers: optional key/value HTTP headers for destination auth
+operations:
+- name: Insert
+  description: Sync only new contacts/companies after the initial batch
+- name: Upsert
+  description: Transmit all property updates for all audience members
+entities:
+- name: Companies
+  fields:
+  - name
+  - domains
+  - country
+  - industry
+  - employee_count
+  - source_system
+  - account_owner
+  - engagement_score
+  - signals_last_30_days
+- name: Contacts
+  fields:
+  - name
+  - email
+  - title
+  - role
+  - seniority
+  - phone
+  - company
+  - corporate_email_verified
+  - crm_origin
+notes: >-
+  No AsyncAPI document is published by the provider; this captures the documented webhook
+  catalog. Updates to records already synced are not included (except under Upsert).

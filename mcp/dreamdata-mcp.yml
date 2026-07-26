@@ -1,0 +1,53 @@
+generated: '2026-07-18'
+method: searched
+status: published
+source: https://developer.dreamdata.io/mcp/mcp-server/
+server:
+  name: dreamdata
+  transport: http
+  url: https://mcp.dreamdata.io/mcp
+auth:
+  type: oauth2.1
+  pkce: S256
+  authorization_endpoint: https://authenticate.dreamdata.io/oauth/2.1/authorize
+  token_endpoint: https://authenticate.dreamdata.io/oauth/2.1/token
+  registration_endpoint: https://authenticate.dreamdata.io/oauth/2.1/register
+  scopes:
+  - read
+  - reports:write
+  consent:
+  - name: Read Dreamdata Resources
+    required: true
+  - name: Save Dreamdata Reports
+    required: false
+clients:
+- Claude
+- Cursor
+- ChatGPT
+- Lovable
+tool_groups:
+- name: Run and explore reports
+  tools:
+  - run_saved_report
+  - run_saved_report_for_date_range
+  - list_saved_reports
+  - list_report_metric_drilldown_entities
+- name: Locate companies
+  tools:
+  - list_my_accounts
+  - run_audience_query
+  - list_audiences
+  - get_audience_definition
+- name: Understand company journeys
+  tools:
+  - search_companies
+  - get_company_journey
+  - list_company_journey_stages
+- name: Build reports from scratch
+  tools:
+  - report_builder_start
+  - report_builder_run_config
+  - report_builder_save_report
+notes: >-
+  Official hosted/remote MCP server exposing 20+ tools. No local install required; users
+  add it as a custom connector in an MCP-aware assistant and authorize via OAuth 2.1 PKCE.

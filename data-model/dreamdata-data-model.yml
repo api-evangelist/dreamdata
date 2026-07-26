@@ -1,0 +1,55 @@
+generated: '2026-07-18'
+method: searched
+source: https://developer.dreamdata.io/data-warehouse/intro/
+description: >-
+  Dreamdata's event-based, account-based data warehouse model. Individual Contacts and
+  their Companies are linked through Events grouped into Sessions, progressed across
+  funnel Stages, and connected to Attribution and Spend for revenue analysis.
+entities:
+- name: Contact
+  description: An individual user, tracked by email.
+  relationships:
+  - type: belongs_to
+    target: Company
+    via: company
+  - type: has_many
+    target: Event
+    via: userId
+- name: Company
+  description: An account aggregating its contacts and their activity.
+  relationships:
+  - type: has_many
+    target: Contact
+    via: company
+  - type: has_many
+    target: Stage
+    via: company
+- name: Event
+  description: A tracked activity (track/page/identify/group/alias) with a unique messageId.
+  relationships:
+  - type: belongs_to
+    target: Contact
+    via: userId
+  - type: belongs_to
+    target: Session
+    via: sessionId
+- name: Session
+  description: A grouping of events for a visit.
+  relationships:
+  - type: has_many
+    target: Event
+    via: sessionId
+- name: Stage
+  description: A funnel/lifecycle stage in the account journey.
+  relationships:
+  - type: belongs_to
+    target: Company
+    via: company
+- name: Attribution
+  description: Revenue/pipeline credit assigned across touchpoints.
+  relationships:
+  - type: belongs_to
+    target: Stage
+    via: stage
+- name: Spend
+  description: Ad/marketing spend joined to channels and campaigns for ROI.

@@ -1,0 +1,26 @@
+# Dreamdata – B2B Journey Data & Revenue Attribution
+> https://dreamdata.io/ – Clean, connected B2B customer journey data, revenue attribution, and marketing performance insights. Includes product overview, documentation, and resources for tracking, integrations, and analytics.
+
+## Core Pages
+- [Home](https://dreamdata.io/) – Overview of Dreamdata platform, value proposition, and product areas.
+- [Documentation](https://docs.dreamdata.io/) – Main entry point for user and product documentation.
+- [Developer Docs](https://developer.dreamdata.io/) – Developer-focused documentation including tracking and API specs.
+- [Blog](https://dreamdata.io/blog/) – Company news, updates, and product announcements.
+- [Recipes](https://dreamdata.io/recipes/) – Step-by-step guides for specific use cases (including LLM traffic tracking).
+- [Pricing](https://dreamdata.io/pricing) – Plan details and pricing info.
+- [Support / Contact](https://dreamdata.io/contact) – Get help or contact sales/support.
+
+## Documentation
+- [Get Started](https://docs.dreamdata.io/category/dn0vc6sp04-get-started-with-dreamdata) – Setup guides and onboarding info.
+- [Tracking Guides](https://docs.dreamdata.io/category/d0…-tracking) – Tracking, web scripts, and analytics setup.
+- [Data Platform](https://docs.dreamdata.io/category/f16d7z22fh-sources) – Sources, integrations, and data ingestion guides.
+- [Dashboards & Analytics](https://docs.dreamdata.io/article/…-overview) – How to use dashboards, performance, content, and revenue analytics.
+- [FAQ](https://docs.dreamdata.io/category/jh2b4w1j7f-faq) – Common questions and answers.
+
+## Other Resources
+- [Tracking LLM Influence on Pipeline and Revenue](https://dreamdata.io/recipe/tracking-llm-influence-on-pipeline-and-revenue) – Example use case measuring LLM traffic impact.  
+- [Dreamdata Chrome Extension Guide](https://dreamdata.io/recipe/how-to-use-the-dreamdata-chrome-extension-for-smarter-prospecting) – How to use the extension.
+
+## Contact
+- Email: friends@dreamdata.io
+- Phone: +45 71 99 04 80

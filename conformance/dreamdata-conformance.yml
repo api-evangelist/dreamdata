@@ -1,0 +1,37 @@
+generated: '2026-07-18'
+method: searched
+source: https://mcp.dreamdata.io/.well-known/oauth-authorization-server + https://authenticate.dreamdata.io/.well-known/openid-configuration + https://dreamdata.io/security
+standards:
+- id: oauth2.1
+  conforms: true
+  evidence: MCP server publishes RFC 8414 authorization-server metadata with authorization_code + refresh_token grants and S256 PKCE
+- id: oauth2-pkce
+  conforms: true
+  evidence: code_challenge_methods_supported = ["S256"]
+- id: oidc
+  conforms: true
+  evidence: OpenID Connect discovery document at authenticate.dreamdata.io/.well-known/openid-configuration (RS256 id tokens)
+- id: rfc8414-oauth-authorization-server-metadata
+  conforms: true
+  evidence: /.well-known/oauth-authorization-server returns 200 with full metadata
+- id: dynamic-client-registration
+  conforms: true
+  evidence: registration_endpoint present in authorization-server metadata (RFC 7591)
+- id: segment-spec
+  conforms: true
+  evidence: track/page/identify/group/alias event methods and batch endpoint mirror the Segment tracking spec
+- id: soc2-type-ii
+  conforms: true
+  evidence: "Dreamdata is SOC2 Type II certified (dreamdata.io/security)"
+- id: gdpr
+  conforms: true
+  evidence: GDPR-compliant DPA, appointed DPO, EU data residency
+- id: hmac-webhook-signing
+  conforms: true
+  evidence: Outbound webhook syncs carry an HMAC-SHA256 signature
+- id: rfc9457-problem-details
+  conforms: false
+- id: fhir-r4
+  conforms: false
+- id: fapi
+  conforms: false

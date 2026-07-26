@@ -1,0 +1,19 @@
+generated: '2026-07-18'
+method: searched
+source: https://developer.dreamdata.io/ + npm + github.com/dreamdata-io
+packages:
+- language: javascript
+  registry: npm
+  name: "@dreamdata/analytics"
+  url: https://www.npmjs.com/package/@dreamdata/analytics
+  install: npm install @dreamdata/analytics
+  version: 6.0.0
+  official: true
+  note: Node.js server-side analytics client (Segment analytics-node fork published under the @dreamdata scope)
+- language: go
+  registry: github
+  name: github.com/dreamdata-io/analytics-go
+  url: https://github.com/dreamdata-io/analytics-go
+  install: go get github.com/dreamdata-io/analytics-go
+  official: true
+  note: Go server-side analytics client (Segment analytics client for Go)

@@ -1,0 +1,39 @@
+generated: '2026-07-18'
+method: searched
+source: https://mcp.dreamdata.io/.well-known/oauth-authorization-server
+docs: https://developer.dreamdata.io/mcp/mcp-server/
+schemes:
+- name: MCPOAuth21
+  source: https://mcp.dreamdata.io/.well-known/oauth-authorization-server
+  flows:
+  - flow: authorizationCode
+    pkce: S256
+    authorizationUrl: https://authenticate.dreamdata.io/oauth/2.1/authorize
+    tokenUrl: https://authenticate.dreamdata.io/oauth/2.1/token
+- name: OpenIDConnect
+  source: https://authenticate.dreamdata.io/.well-known/openid-configuration
+  flows:
+  - flow: authorizationCode
+    authorizationUrl: https://authenticate.dreamdata.io/propelauth/oauth/authorize
+    tokenUrl: https://authenticate.dreamdata.io/propelauth/oauth/token
+scopes:
+- scope: read
+  description: Read Dreamdata resources (reports, audiences, company journeys). Required consent for the MCP server.
+  flows: [authorizationCode]
+  sources: [MCPOAuth21]
+- scope: reports:write
+  description: Save Dreamdata reports. Optional consent for the MCP server.
+  flows: [authorizationCode]
+  sources: [MCPOAuth21]
+- scope: openid
+  description: OpenID Connect sign-in (issue an ID token).
+  flows: [authorizationCode]
+  sources: [OpenIDConnect]
+- scope: email
+  description: Access the user's email and email_verified claims.
+  flows: [authorizationCode]
+  sources: [OpenIDConnect]
+- scope: profile
+  description: Access basic profile claims (first_name, last_name, picture_url).
+  flows: [authorizationCode]
+  sources: [OpenIDConnect]

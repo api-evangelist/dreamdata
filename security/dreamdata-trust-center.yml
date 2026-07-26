@@ -1,0 +1,23 @@
+generated: '2026-07-18'
+method: searched
+probe: false
+url: https://trust.dreamdata.io/
+compliance_page: https://dreamdata.io/security
+certifications:
+- SOC 2 Type II
+- GDPR
+- US Privacy
+data_practices:
+  cloud_provider: Google Cloud Platform
+  data_residency: European Union
+  dpo: appointed Data Protection Officer
+  data_sale: does not sell customer data
+evidence:
+- source: https://dreamdata.io/security
+  keywords: [soc2 type ii, gdpr, us privacy, bug bounty]
+  quote: "Dreamdata is SOC2 Type II certified - we always handle your data securely and responsibly."
+- source: https://trust.dreamdata.io/
+  keywords: [trust center]
+notes: >-
+  trust.dreamdata.io returns 200 but renders certifications client-side; certification
+  names sourced from the public security page.
