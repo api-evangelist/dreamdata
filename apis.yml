@@ -31,7 +31,7 @@ accessModel:
   method: derived
 specificationVersion: '0.20'
 created: '2026-07-17'
-modified: '2026-07-18'
+modified: '2026-08-13'
 image: http://static1.squarespace.com/static/60880c8985e48a388d33bd16/t/6821cbca7c756751d5f1473a/1748866920123/Activation+and+Attribution+for+B2B+Marketing.png?format=1500w
 tags:
 - Company
@@ -82,7 +82,7 @@ common:
 - type: Blog
   url: https://dreamdata.io/blog
 - type: Support
-  url: https://dreamdata.io/contact
+  url: https://dreamdata.io/support
 - type: Pricing
   url: https://dreamdata.io/pricing
 - type: SignUp
@@ -129,8 +129,16 @@ common:
   url: data-model/dreamdata-data-model.yml
 - type: Lifecycle
   url: lifecycle/dreamdata-lifecycle.yml
+- type: ErrorCatalog
+  url: errors/dreamdata-error-codes.yml
+- type: Plans
+  url: plans/dreamdata-plans-pricing.yml
+- type: RateLimits
+  url: rate-limits/dreamdata-rate-limits.yml
+- type: AgentSkill
+  url: skills/_index.yml
 x-enrichment:
-  date: '2026-07-19'
-  status: backfilled
+  date: '2026-08-13'
+  status: enriched
+  artifacts_added: 8
   pass: local-v1
-  note: backfilled from .gitignore signal + verified work evidence
