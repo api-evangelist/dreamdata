@@ -1,0 +1,1 @@
+{"resource":"https://mcp.dreamdata.io/mcp","authorization_servers":["https://authenticate.dreamdata.io/oauth/2.1"],"scopes_supported":["read","reports:write"],"bearer_methods_supported":["header"]}

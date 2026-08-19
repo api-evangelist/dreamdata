@@ -1,7 +1,22 @@
-generated: '2026-07-18'
+generated: '2026-08-13'
 method: searched
-source: https://mcp.dreamdata.io/.well-known/oauth-authorization-server
+source: >-
+  https://mcp.dreamdata.io/.well-known/oauth-authorization-server +
+  https://mcp.dreamdata.io/.well-known/oauth-protected-resource/mcp
 docs: https://developer.dreamdata.io/mcp/mcp-server/
+checked: '2026-08-13'
+protected_resource:
+  resource: https://mcp.dreamdata.io/mcp
+  metadata: https://mcp.dreamdata.io/.well-known/oauth-protected-resource/mcp
+  authorization_servers:
+  - https://authenticate.dreamdata.io/oauth/2.1
+  scopes_supported: [read, 'reports:write']
+  bearer_methods_supported: [header]
+  note: >-
+    RFC 9728 protected-resource metadata, discovered from the resource_metadata parameter on
+    the 401 WWW-Authenticate challenge returned by an anonymous POST to the MCP endpoint
+    (probed 2026-08-13). It confirms the two MCP scopes at the resource itself, not only in the
+    docs.
 schemes:
 - name: MCPOAuth21
   source: https://mcp.dreamdata.io/.well-known/oauth-authorization-server

@@ -1,0 +1,35 @@
+generated: '2026-08-13'
+method: generated
+source: >-
+  https://developer.dreamdata.io/mcp/mcp-server/ +
+  https://developer.dreamdata.io/server-side/server-side-tracking/ +
+  mcp/dreamdata-mcp.yml + conventions/dreamdata-conventions.yml
+grounding_note: >-
+  Dreamdata publishes no OpenAPI, so these skills are not grounded in operationIds. They are
+  grounded in the two contracts Dreamdata does publish verbatim: the 21 MCP tool names printed
+  in the provider's own MCP server documentation, and the single documented HTTP operation on
+  the ingestion surface (POST https://api.dreamdata.cloud/v1/batch). Every tool name and every
+  endpoint referenced in these files appears in the provider's docs; none is invented. The live
+  MCP tools/list is auth-gated (401 anonymously), so input schemas are to be discovered at
+  runtime rather than assumed.
+skills:
+- file: dreamdata-track-server-side-events.md
+  name: Send server-side events to Dreamdata
+  api: https://api.dreamdata.cloud/v1/batch
+  surface: Event Tracking API
+  operations: [POST /v1/batch]
+- file: dreamdata-run-and-drill-reports.md
+  name: Run and drill into Dreamdata Analytics Hub reports
+  api: mcp/dreamdata-mcp.yml
+  surface: MCP server
+  operations: [list_my_accounts, list_saved_reports, run_saved_report, run_saved_report_for_date_range, list_report_metric_drilldown_entities]
+- file: dreamdata-find-accounts-and-journeys.md
+  name: Find in-market accounts and read their Dreamdata journey
+  api: mcp/dreamdata-mcp.yml
+  surface: MCP server
+  operations: [list_my_accounts, list_audience_filter_properties, list_audience_filter_values, describe_audience_config_schema, run_audience_query, list_audiences, get_audience_definition, search_companies, get_company_journey, list_company_journey_stages]
+- file: dreamdata-build-and-save-report.md
+  name: Build a Dreamdata report from scratch and save it
+  api: mcp/dreamdata-mcp.yml
+  surface: MCP server
+  operations: [report_builder_start, report_builder_list_analysis_types, report_builder_list_subjects, report_builder_get_components, report_builder_resolve_calendar_period, report_builder_resolve_rolling_window, report_builder_list_property_values, report_builder_search_property_values, report_builder_run_config, report_builder_save_report]

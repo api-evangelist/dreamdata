@@ -1,0 +1,73 @@
+generated: '2026-08-13'
+method: searched
+source: >-
+  https://developer.dreamdata.io/mcp/mcp-server/ (Troubleshooting) +
+  https://developer.dreamdata.io/server-side/server-side-tracking/ +
+  live probe of https://mcp.dreamdata.io/mcp
+format: http-status
+format_note: >-
+  Dreamdata publishes no RFC 9457 problem+json catalog and no numeric application error
+  registry. What it does publish is a short troubleshooting table for the MCP server keyed on
+  HTTP status, plus one literal server message. Everything below is transcribed from the
+  provider's own pages or observed on a live anonymous request; nothing is inferred.
+surfaces:
+- surface: MCP server
+  endpoint: https://mcp.dreamdata.io/mcp
+  envelope: >-
+    JSON body {"error": "...", "error_description": "..."} on the auth path, alongside an
+    RFC 6750 WWW-Authenticate: Bearer challenge carrying resource_metadata.
+- surface: Event Tracking API
+  endpoint: https://api.dreamdata.cloud/v1/batch
+  envelope: >-
+    Not documented. The docs describe request shape and the 500kb batch ceiling but publish no
+    error reference, no error body schema and no status-code table for the batch endpoint.
+problems:
+- code: 401
+  status: 401
+  surface: MCP server
+  title: Unauthorized
+  detail: Your session has expired or the token is invalid.
+  remediation: Disconnect and reconnect the connector to re-authenticate.
+  observed: true
+  observed_note: >-
+    Reproduced 2026-08-13 by POSTing {"jsonrpc":"2.0","id":1,"method":"tools/list"} anonymously.
+    Response carried WWW-Authenticate: Bearer error="invalid_token",
+    error_description="Authentication failed. The provided bearer token is invalid, expired, or
+    no longer recognized by the server...",
+    resource_metadata="https://mcp.dreamdata.io/.well-known/oauth-protected-resource/mcp".
+  source: https://developer.dreamdata.io/mcp/mcp-server/
+- code: 403
+  status: 403
+  surface: MCP server
+  title: Forbidden
+  detail: Authenticated, but not a member of the Dreamdata account being queried.
+  remediation: Run list_my_accounts to see accessible accounts, or contact the Dreamdata account owner.
+  observed: false
+  source: https://developer.dreamdata.io/mcp/mcp-server/
+- code: 502
+  status: 502
+  surface: MCP server
+  title: Bad Gateway from the connector
+  detail: The Dreamdata internal API is unreachable. Server-side fault.
+  remediation: Contact mcp-feedback@dreamdata.io.
+  observed: false
+  source: https://developer.dreamdata.io/mcp/mcp-server/
+- code: mcp-not-enabled
+  status: null
+  surface: MCP server
+  title: MCP server is not enabled for this user
+  detail: >-
+    Literal message "MCP server is not enabled for this user. Contact your Dreamdata account
+    owner" — the connector authorizes but no tools appear.
+  remediation: Account-level entitlement; email mcp-feedback@dreamdata.io or ask the account owner to enable it.
+  observed: false
+  source: https://developer.dreamdata.io/mcp/mcp-server/
+constraints:
+- surface: Event Tracking API
+  constraint: batch payload limited to 500kb per request
+  status_on_violation: not documented
+  source: https://developer.dreamdata.io/server-side/server-side-tracking/
+gaps:
+- The batch tracking endpoint has no published error reference — no status table, no body schema, no per-field validation errors.
+- No application/problem+json (RFC 9457) anywhere on the surface.
+- No documented error codes for the outbound webhook syncs (retry/backoff behaviour on a failing destination is unstated).

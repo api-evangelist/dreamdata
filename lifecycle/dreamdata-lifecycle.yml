@@ -1,15 +1,84 @@
-generated: '2026-07-18'
+generated: '2026-08-13'
 method: searched
-source: https://status.dreamdata.io/ + https://developer.dreamdata.io/
+source: >-
+  https://status.dreamdata.io/ + https://developer.dreamdata.io/mcp/mcp-server/ +
+  https://developer.dreamdata.io/data-warehouse/schema + https://developer.dreamdata.io/
+checked: '2026-08-13'
 versioning:
   scheme: uri-path
   current: v1
   example: https://api.dreamdata.cloud/v1/batch
+  policy_url: null
+  note: >-
+    The tracking API carries a /v1 path segment. No versioning policy is published — nothing
+    states how a v2 would be introduced, how long v1 is supported, or whether breaking changes
+    are permitted within v1.
 status_page: https://status.dreamdata.io/
+status_page_detail:
+  platform: statuspage-style JSON API
+  summary_endpoint: https://status.dreamdata.io/api/v2/summary.json
+  rss: https://status.dreamdata.io/history.rss
+  observed: '2026-08-13'
+  observed_status: UP
+  note: >-
+    status.dreamdata.io serves a machine-readable summary (api/v2/summary.json returned
+    {"page":{"name":"Dreamdata",...,"status":"UP"}}) and an incident history RSS feed — both
+    fetched anonymously.
 deprecation:
   policy_url: null
   sunset_header: null
-  note: No formal deprecation/Sunset-header policy is published.
+  note: >-
+    No deprecation policy, no RFC 8594 Sunset/Deprecation header support, and no advance-notice
+    commitment is published for any surface.
+maturity:
+- surface: MCP server
+  stage: beta
+  source: https://developer.dreamdata.io/mcp/mcp-server/
+  quote: >-
+    "The Dreamdata MCP Server is in Beta. It may contain bugs and experience instability until
+    it reaches general availability, and tools may change."
+  implication: >-
+    The agent-facing tool contract is explicitly declared unstable, with no changelog where a
+    tool change would be announced.
+- surface: Event Tracking API
+  stage: general availability
+  source: https://developer.dreamdata.io/server-side/server-side-tracking/
+  note: Not labelled beta; documented as the production server-side ingestion path.
+- surface: Client-side JavaScript
+  stage: general availability
+  version_label: JavaScript v2.0
+  source: https://developer.dreamdata.io/client-side/script-installation/
+  note: >-
+    The in-app source is labelled "JavaScript v2.0", implying a v1 predecessor whose status is
+    not documented.
 sla:
   url: null
+  uptime_target: null
+  note: No public SLA or uptime commitment. The Advanced tier is contact-sales, so any SLA is contractual.
 deprecated_operations: []
+deprecated_fields:
+  source: https://developer.dreamdata.io/data-warehouse/schema
+  note: >-
+    The published data-warehouse schema marks fields deprecated inline in their descriptions —
+    the only place Dreamdata signals deprecation anywhere in its developer surface.
+  fields:
+  - table: events
+    field: dd_is_primary_event
+    marker: "LEGACY (deprecated for counting)"
+    replacement: dd_session_activity_id (for session counts)
+  - table: attribution
+    field: dd_is_primary_event
+    marker: "LEGACY (deprecated for counting)"
+    replacement: dd_session_activity_id (for session counts)
+  - table: spend
+    field: adNetwork
+    marker: "(Deprecated: use source for the origin of the spend)"
+    replacement: source
+support_contacts:
+- mcp-feedback@dreamdata.io (MCP server feedback and entitlement issues)
+- friends@dreamdata.io (general)
+notes: >-
+  Operational transparency is split: a real, machine-readable status page on one side; no
+  versioning policy, no deprecation policy, no Sunset headers, no SLA and no changelog on the
+  other. Field-level deprecations exist but only as prose inside the warehouse schema, where no
+  automated consumer would find them.

@@ -1,10 +1,15 @@
-generated: '2026-07-18'
+generated: '2026-08-13'
 method: searched
-source: https://mcp.dreamdata.io/.well-known/oauth-authorization-server + https://authenticate.dreamdata.io/.well-known/openid-configuration + https://dreamdata.io/security
+source: >-
+  https://mcp.dreamdata.io/.well-known/oauth-authorization-server +
+  https://mcp.dreamdata.io/.well-known/oauth-protected-resource/mcp +
+  https://authenticate.dreamdata.io/.well-known/openid-configuration +
+  https://dreamdata.io/security + https://developer.dreamdata.io/mcp/mcp-server/
+checked: '2026-08-13'
 standards:
 - id: oauth2.1
   conforms: true
-  evidence: MCP server publishes RFC 8414 authorization-server metadata with authorization_code + refresh_token grants and S256 PKCE
+  evidence: MCP server publishes RFC 8414 authorization-server metadata with authorization_code + refresh_token grants and S256 PKCE; docs state OAuth 2.1 with SHA-256 PKCE is required
 - id: oauth2-pkce
   conforms: true
   evidence: code_challenge_methods_supported = ["S256"]
@@ -14,24 +19,61 @@ standards:
 - id: rfc8414-oauth-authorization-server-metadata
   conforms: true
   evidence: /.well-known/oauth-authorization-server returns 200 with full metadata
-- id: dynamic-client-registration
+- id: rfc9728-oauth-protected-resource-metadata
   conforms: true
-  evidence: registration_endpoint present in authorization-server metadata (RFC 7591)
+  evidence: >-
+    /.well-known/oauth-protected-resource/mcp returns 200 with resource, authorization_servers,
+    scopes_supported and bearer_methods_supported; the 401 challenge on the MCP endpoint
+    advertises it via the resource_metadata parameter (probed 2026-08-13)
+- id: rfc6750-bearer-token-usage
+  conforms: true
+  evidence: 'anonymous POST to the MCP endpoint returned WWW-Authenticate: Bearer error="invalid_token" with resource_metadata (probed 2026-08-13)'
+- id: dynamic-client-registration
+  conforms: partial
+  evidence: >-
+    registration_endpoint present in authorization-server metadata (RFC 7591), but the docs
+    state the server only recognises Claude, Claude Code, Lovable, Cursor and ChatGPT and that
+    other clients must be listed by contacting mcp-feedback@dreamdata.io
+- id: mcp
+  conforms: true
+  evidence: hosted remote MCP server at https://mcp.dreamdata.io/mcp over streamable HTTP, published tool catalog of 21 tools, labelled Beta by the provider
 - id: segment-spec
   conforms: true
-  evidence: track/page/identify/group/alias event methods and batch endpoint mirror the Segment tracking spec
+  evidence: track/page/identify/group/alias methods and the batch envelope mirror the Segment tracking spec; the SDKs are forks of Segment's analytics-node and analytics-go
+- id: hmac-webhook-signing
+  conforms: true
+  evidence: Outbound audience webhook syncs carry an HMAC-SHA256 signature with a per-sync retrievable signing key
 - id: soc2-type-ii
   conforms: true
   evidence: "Dreamdata is SOC2 Type II certified (dreamdata.io/security)"
 - id: gdpr
   conforms: true
-  evidence: GDPR-compliant DPA, appointed DPO, EU data residency
-- id: hmac-webhook-signing
+  evidence: GDPR-compliant DPA, appointed DPO, EU data residency on Google Cloud
+- id: google-consent-mode-v2
   conforms: true
-  evidence: Outbound webhook syncs carry an HMAC-SHA256 signature
+  evidence: client-side docs document Consent Mode v2 integration across CookieBot, CookieYes, OneTrust, Osano, HubSpot, Cookie Information, Framer and Klaro
+- id: openapi
+  conforms: false
+  evidence: no OpenAPI/Swagger document is published on any Dreamdata host (probed 2026-08-13, see x-coverage in apis.yml)
+- id: asyncapi
+  conforms: false
+  evidence: webhook syncs are documented in prose only; no AsyncAPI document exists
 - id: rfc9457-problem-details
   conforms: false
-- id: fhir-r4
+  evidence: no application/problem+json anywhere on the surface
+- id: rfc9116-security-txt
   conforms: false
+  evidence: /.well-known/security.txt returns 404 on every Dreamdata host
+- id: rfc9727-api-catalog
+  conforms: false
+  evidence: /.well-known/api-catalog returns 404 on every Dreamdata host
+- id: rfc8594-sunset-header
+  conforms: false
+  evidence: no deprecation policy or Sunset/Deprecation header support is published
+- id: a2a
+  conforms: false
+  evidence: no agent card at /.well-known/agent-card.json or /.well-known/agent.json on any host (probed 2026-08-13)
 - id: fapi
+  conforms: false
+- id: fhir-r4
   conforms: false

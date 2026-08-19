@@ -1,12 +1,22 @@
-generated: '2026-07-18'
+generated: '2026-08-13'
 method: searched
-source: https://mcp.dreamdata.io/ + https://authenticate.dreamdata.io/
+source: live probes of dreamdata.io, api.dreamdata.cloud, developer.dreamdata.io, mcp.dreamdata.io, authenticate.dreamdata.io
+checked: '2026-08-13'
 documents:
 - host: https://mcp.dreamdata.io
   path: /.well-known/oauth-authorization-server
   status: 200
   file: dreamdata-mcp-oauth-authorization-server.json
   note: RFC 8414 OAuth 2.1 authorization server metadata for the Dreamdata MCP server
+- host: https://mcp.dreamdata.io
+  path: /.well-known/oauth-protected-resource/mcp
+  status: 200
+  file: dreamdata-mcp-oauth-protected-resource.json
+  note: >-
+    RFC 9728 OAuth 2.0 Protected Resource Metadata for the MCP endpoint. Advertised by the
+    401 WWW-Authenticate challenge on POST https://mcp.dreamdata.io/mcp
+    (resource_metadata="https://mcp.dreamdata.io/.well-known/oauth-protected-resource/mcp").
+    Names authorization_servers, scopes_supported [read, reports:write] and header bearer methods.
 - host: https://authenticate.dreamdata.io
   path: /.well-known/openid-configuration
   status: 200
@@ -15,12 +25,94 @@ documents:
 - host: https://mcp.dreamdata.io
   path: /.well-known/oauth-protected-resource
   status: 404
-- host: https://api.dreamdata.cloud
+  note: the bare path 404s; the resource-scoped path /.well-known/oauth-protected-resource/mcp is the one served
+- host: https://mcp.dreamdata.io
+  path: /.well-known/openid-configuration
+  status: 404
+- host: https://mcp.dreamdata.io
   path: /.well-known/security.txt
+  status: 404
+- host: https://mcp.dreamdata.io
+  path: /.well-known/api-catalog
+  status: 404
+- host: https://mcp.dreamdata.io
+  path: /.well-known/ai-plugin.json
+  status: 404
+- host: https://mcp.dreamdata.io
+  path: /.well-known/agent-card.json
+  status: 404
+- host: https://mcp.dreamdata.io
+  path: /.well-known/agent.json
   status: 404
 - host: https://dreamdata.io
   path: /.well-known/security.txt
   status: 404
+  note: 'returns a JSON body {"message":"security.txt not found"} — no RFC 9116 document is served'
+- host: https://dreamdata.io
+  path: /.well-known/openid-configuration
+  status: 404
+- host: https://dreamdata.io
+  path: /.well-known/oauth-authorization-server
+  status: 404
+- host: https://dreamdata.io
+  path: /.well-known/api-catalog
+  status: 404
+- host: https://dreamdata.io
+  path: /.well-known/ai-plugin.json
+  status: 404
+- host: https://dreamdata.io
+  path: /.well-known/agent-card.json
+  status: 404
+- host: https://dreamdata.io
+  path: /.well-known/agent.json
+  status: 404
+- host: https://api.dreamdata.cloud
+  path: /.well-known/security.txt
+  status: 404
+- host: https://api.dreamdata.cloud
+  path: /.well-known/openid-configuration
+  status: 404
+- host: https://api.dreamdata.cloud
+  path: /.well-known/oauth-authorization-server
+  status: 404
 - host: https://api.dreamdata.cloud
   path: /.well-known/api-catalog
   status: 404
+- host: https://api.dreamdata.cloud
+  path: /.well-known/ai-plugin.json
+  status: 404
+- host: https://api.dreamdata.cloud
+  path: /.well-known/agent-card.json
+  status: 404
+- host: https://api.dreamdata.cloud
+  path: /.well-known/agent.json
+  status: 404
+- host: https://developer.dreamdata.io
+  path: /.well-known/security.txt
+  status: 404
+- host: https://developer.dreamdata.io
+  path: /.well-known/api-catalog
+  status: 404
+- host: https://developer.dreamdata.io
+  path: /.well-known/agent-card.json
+  status: 404
+- host: https://developer.dreamdata.io
+  path: /.well-known/agent.json
+  status: 404
+- host: https://authenticate.dreamdata.io
+  path: /.well-known/oauth-authorization-server
+  status: 404
+- host: https://authenticate.dreamdata.io
+  path: /.well-known/security.txt
+  status: 404
+- host: https://authenticate.dreamdata.io
+  path: /.well-known/agent-card.json
+  status: 404
+- host: https://authenticate.dreamdata.io
+  path: /.well-known/agent.json
+  status: 404
+notes: >-
+  Three real documents are served, all on the OAuth/OIDC side of the MCP surface. No
+  security.txt (RFC 9116), no api-catalog (RFC 9727), no ai-plugin.json and no A2A agent card
+  on any Dreamdata host. The 404 bodies on dreamdata.io and developer.dreamdata.io are the
+  sites' own HTML/JSON 404 pages, not SPA soft-200s.

@@ -1,0 +1,48 @@
+generated: '2026-08-13'
+method: searched
+source: >-
+  https://developer.dreamdata.io/server-side/server-side-tracking/ +
+  https://developer.dreamdata.io/client-side/api/ +
+  https://developer.dreamdata.io/mcp/mcp-server/ +
+  https://dreamdata.io/pricing
+checked: '2026-08-13'
+limit_count: 0
+limits: []
+documented_constraints:
+- surface: Event Tracking API
+  endpoint: POST https://api.dreamdata.cloud/v1/batch
+  kind: payload-size
+  value: 500kb per request
+  scope: per-request
+  quote: "Dreamdata's endpoint supports sending batches of data, limited to 500kb per request."
+  source: https://developer.dreamdata.io/server-side/server-side-tracking/
+  note: >-
+    A size ceiling, not a rate limit. The docs do not say what status code is returned when it
+    is exceeded.
+- surface: Platform
+  kind: volume-entitlement
+  value: monthly tracked users (MTUs) per plan
+  scope: per-account
+  source: https://dreamdata.io/pricing
+  note: >-
+    Billing-side volume metric, not a request-rate limit. The free plan additionally publishes
+    Seats 5, Stage Models 3, Notifications 2, Syncs 1 — entitlements, not throttles.
+response_headers:
+  published: false
+  observed: []
+  note: >-
+    No X-RateLimit-*, RateLimit-* or Retry-After headers are documented for any Dreamdata
+    surface, and none were observable anonymously — the tracking endpoint requires a source API
+    key and the MCP endpoint returns 401 before any rate-limit signalling.
+status_on_exhaustion: not published
+retry_behaviour:
+  client_side: >-
+    Both first-party SDKs "handle batching, retries, and graceful shutdown automatically"
+    (Node.js and Go SDK pages), but the retry policy, backoff and the conditions that trigger a
+    retry are not specified, so an agent cannot reason about them.
+  source: https://developer.dreamdata.io/server-side/nodejs-sdk/
+notes: >-
+  Dreamdata publishes no rate limits for any surface: not for the batch tracking endpoint, not
+  for the outbound webhook syncs, and not for the MCP server. An honest zero — the only
+  documented request-level constraint is the 500kb batch ceiling. This is a real gap for agent
+  callers, who have no published signal telling them when to back off.

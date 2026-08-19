@@ -1,6 +1,11 @@
-generated: '2026-07-18'
+generated: '2026-08-13'
 method: searched
-source: https://developer.dreamdata.io/ + npm + github.com/dreamdata-io
+source: >-
+  https://developer.dreamdata.io/server-side/nodejs-sdk/ +
+  https://developer.dreamdata.io/server-side/go-sdk/ +
+  https://developer.dreamdata.io/client-side/csp/ +
+  registry.npmjs.org + proxy.golang.org + github.com/dreamdata-io
+checked: '2026-08-13'
 packages:
 - language: javascript
   registry: npm
@@ -8,12 +13,90 @@ packages:
   url: https://www.npmjs.com/package/@dreamdata/analytics
   install: npm install @dreamdata/analytics
   version: 6.0.0
+  published: '2022-05-02'
   official: true
-  note: Node.js server-side analytics client (Segment analytics-node fork published under the @dreamdata scope)
+  docs: https://developer.dreamdata.io/server-side/nodejs-sdk/
+  note: >-
+    Node.js server-side analytics client, the SDK the developer docs name for server-side
+    tracking. A fork of Segment's analytics-node (npm repository field still points at
+    segmentio/analytics-node). Latest release 6.0.0 read from registry.npmjs.org — published
+    2022-05-02, more than four years before this check, while the docs it backs were rewritten
+    in 2026 and claim Cloudflare Workers / Vercel Edge support. Upstream repo
+    github.com/dreamdata-io/analytics-node is archived.
+- language: javascript
+  registry: npm
+  name: "@dreamdata/analytics-next"
+  url: https://www.npmjs.com/package/@dreamdata/analytics-next
+  install: npm install @dreamdata/analytics-next
+  version: 2.0.4
+  published: '2024-09-16'
+  official: true
+  note: >-
+    Analytics Next (Analytics 2.0) — the browser/SPA JavaScript library, published under the
+    @dreamdata scope from github.com/dreamdata-io/analytics-next. Not linked from the current
+    developer docs, which route browser installs through the account-specific CDN snippet
+    instead. Version and date read from registry.npmjs.org.
 - language: go
-  registry: github
+  registry: go
   name: github.com/dreamdata-io/analytics-go
   url: https://github.com/dreamdata-io/analytics-go
   install: go get github.com/dreamdata-io/analytics-go
+  version: v3.2.0
+  published: null
   official: true
-  note: Go server-side analytics client (Segment analytics client for Go)
+  docs: https://developer.dreamdata.io/server-side/go-sdk/
+  note: >-
+    Go server-side analytics client (Segment analytics-go fork), requires Go >= 1.17.
+    v3.2.0 is the highest tag on the GitHub repo. proxy.golang.org answers, but its @latest is
+    v2.0.0+incompatible dated 2015-02-03 because the v3 line is untagged for modules
+    (+incompatible, no go.mod major-version suffix) — so the module proxy carries no publish
+    date for the version the docs tell you to install. Repo last pushed 2026-07-29.
+- language: javascript
+  registry: cdn
+  name: Dreamdata website tracking script
+  url: https://cdn.dreamdata.cloud
+  install: account-specific <script> snippet from Data Platform > Sources > JavaScript v2.0
+  version: null
+  published: null
+  official: true
+  docs: https://developer.dreamdata.io/client-side/script-installation/
+  note: >-
+    The browser tracking script is served from cdn.dreamdata.cloud (plus cdn.drda.io for
+    cookieless account analytics) — both hosts are named in the provider's published CSP
+    guidance. The snippet is generated per account inside the Dreamdata app and is not a
+    registry package: the loader URL is unpinned and floats to whatever the CDN serves, so a
+    consumer cannot pin or verify a version either. version recorded as null for that reason,
+    not because the check was skipped.
+- language: javascript
+  registry: cdn
+  name: cdn.drda.io (cookieless account analytics)
+  url: https://cdn.drda.io
+  install: loaded alongside the standard script when Cookieless Account Analytics is enabled
+  version: null
+  published: null
+  official: true
+  docs: https://developer.dreamdata.io/client-side/csp/
+  note: >-
+    Second first-party CDN host, documented in the Content Security Policy page
+    ("cdn.drda.io can be removed if you do not use Cookieless Account Analytics").
+    Unpinned, no registry metadata endpoint.
+absent:
+- registry: pypi
+  note: no first-party Dreamdata client library published to PyPI (searched 2026-08-13)
+- registry: rubygems
+  note: none
+- registry: packagist
+  note: none
+- registry: crates.io
+  note: none
+- registry: maven-central
+  note: none
+- registry: nuget
+  note: none
+notes: >-
+  Two officially documented server-side SDKs (Node.js, Go) and two first-party CDN-delivered
+  browser surfaces. The strongest currency finding is decay on the Node.js side: the SDK the
+  2026 docs tell developers to install last shipped in 2022, and its upstream GitHub repo is
+  archived; the newer browser library (@dreamdata/analytics-next, 2024) is not referenced from
+  the docs at all. Dreamdata publishes no SDK for the MCP server — it is a remote HTTP server
+  reached over OAuth, with no client package.

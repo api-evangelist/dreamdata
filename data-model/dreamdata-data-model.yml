@@ -1,55 +1,172 @@
-generated: '2026-07-18'
+generated: '2026-08-13'
 method: searched
-source: https://developer.dreamdata.io/data-warehouse/intro/
+source: >-
+  https://developer.dreamdata.io/data-warehouse/schema +
+  https://developer.dreamdata.io/data-warehouse/intro/
+checked: '2026-08-13'
+schema_file: data-model/dreamdata-warehouse-schema.json
+schema_file_note: >-
+  The six table schemas below were harvested verbatim from the provider's Database Schema page,
+  which publishes each table as a BigQuery-style JSON schema (name / type / description). Saved
+  unmodified to data-model/dreamdata-warehouse-schema.json — this is the closest thing
+  Dreamdata publishes to a machine-readable contract, and it describes the read side of the
+  platform (the delivered warehouse), not the write side (the tracking API).
 description: >-
-  Dreamdata's event-based, account-based data warehouse model. Individual Contacts and
-  their Companies are linked through Events grouped into Sessions, progressed across
-  funnel Stages, and connected to Attribution and Spend for revenue analysis.
+  Dreamdata's account-based warehouse model. Events (and their Sessions) are attributed to
+  Contacts and the Companies they belong to, Companies progress through pipeline Stages, and
+  Attribution assigns credit from session touchpoints to stages. Spend joins ad cost to the
+  same channel/source dimensions for ROI. The model is delivered to the customer's own
+  warehouse (BigQuery/Snowflake/Redshift), so entities are tables, not REST resources.
+delivery:
+  form: customer data warehouse tables
+  platforms: [BigQuery, Snowflake, Redshift]
+  access: SQL (plus the MCP server for agent-mediated reads)
+  note: >-
+    There is no public REST read API for these entities. The published HTTP surface is
+    write-only ingestion (POST /v1/batch); reads are SQL against the delivered tables or the
+    MCP tools.
+key_conventions:
+  company_fanout: >-
+    When a contact is linked to several companies, the same event occurrence is written once
+    per company. dd_event_id / dd_session_id are unique per ROW (per company copy);
+    dd_event_activity_id / dd_session_activity_id identify the single real occurrence across
+    copies. Counting on the row keys double-counts.
+  tracking_type: >-
+    dd_tracking_type separates 'activity' (page views, form submits) from 'exposure'
+    (impression-style events such as linkedin_ad_impression, where quantity > 1 and
+    dd_session_activity_id is NULL).
+  change_detection: >-
+    Every table carries row_checksum — a per-row checksum that changes only when a value in the
+    row changes. It is the model's incremental-load / change-detection primitive.
+  custom_properties: >-
+    companies, contacts and stages each carry a custom_properties JSON column holding selected
+    properties from the primary CRM, controlled from in-app settings — so the schema is
+    partly account-specific.
 entities:
-- name: Contact
-  description: An individual user, tracked by email.
-  relationships:
-  - type: belongs_to
-    target: Company
-    via: company
-  - type: has_many
-    target: Event
-    via: userId
-- name: Company
-  description: An account aggregating its contacts and their activity.
+- name: companies
+  primary_key: dd_company_id
+  field_count: 9
+  description: An account, resolved from domains and CRM source systems; the aggregation root of the model.
+  notable_fields: [domain, all_domains, account_owner, properties, custom_properties, source_system, audiences, row_checksum]
   relationships:
   - type: has_many
-    target: Contact
-    via: company
+    target: events
+    via: dd_company_id
   - type: has_many
-    target: Stage
-    via: company
-- name: Event
-  description: A tracked activity (track/page/identify/group/alias) with a unique messageId.
-  relationships:
-  - type: belongs_to
-    target: Contact
-    via: userId
-  - type: belongs_to
-    target: Session
-    via: sessionId
-- name: Session
-  description: A grouping of events for a visit.
+    target: stages
+    via: dd_company_id
+  - type: has_many
+    target: attribution
+    via: dd_company_id
+  - type: has_many
+    target: contacts
+    via: contacts.companies (array)
+- name: contacts
+  primary_key: [dd_contact_id, email]
+  field_count: 8
+  description: An individual, keyed by an anonymized hash of the email. Can belong to several companies.
+  notable_fields: [email, properties, custom_properties, source_system, companies, audiences, row_checksum]
   relationships:
   - type: has_many
-    target: Event
-    via: sessionId
-- name: Stage
-  description: A funnel/lifecycle stage in the account journey.
+    target: companies
+    via: companies (array)
+  - type: has_many
+    target: events
+    via: dd_contact_id
+  - type: has_many
+    target: attribution
+    via: dd_contact_id
+- name: events
+  primary_key: dd_event_id
+  field_count: 19
+  description: >-
+    A tracked activity or exposure, one row per company copy. Carries the session it belongs to,
+    the signals it triggers and the stages it influences.
+  notable_fields: [dd_event_activity_id, dd_session_id, dd_session_activity_id, event_name, timestamp, quantity, dd_visitor_id, dd_tracking_type, dd_event_session_order, event, session, signals, stages, row_checksum]
   relationships:
   - type: belongs_to
-    target: Company
-    via: company
-- name: Attribution
-  description: Revenue/pipeline credit assigned across touchpoints.
+    target: contacts
+    via: dd_contact_id
+  - type: belongs_to
+    target: companies
+    via: dd_company_id
+  - type: has_many
+    target: stages
+    via: stages (array — stages influenced by the event)
+- name: sessions
+  primary_key: dd_session_activity_id
+  field_count: null
+  description: >-
+    Not a standalone table — a session is an embedded RECORD on events and attribution plus the
+    dd_session_id / dd_session_activity_id keys. Attribution is computed on session parameters.
+  relationships:
+  - type: has_many
+    target: events
+    via: dd_session_id
+- name: stages
+  primary_key: dd_stage_id
+  field_count: 15
+  description: >-
+    A pipeline/lifecycle stage entry built on a source object (deal, opportunity), with the
+    timestamp it was reached and the revenue value attached.
+  notable_fields: [stage_name, stage_model_id, dd_object_id, timestamp, value, primary_owner, journey, object_contacts, custom_properties, stage_transitions, row_checksum]
   relationships:
   - type: belongs_to
-    target: Stage
-    via: stage
-- name: Spend
-  description: Ad/marketing spend joined to channels and campaigns for ROI.
+    target: companies
+    via: dd_company_id
+  - type: belongs_to
+    target: contacts
+    via: dd_primary_contact_id
+  - type: has_many
+    target: attribution
+    via: dd_stage_id
+  - type: has_many
+    target: stages
+    via: stage_transitions (array — transitions to and from other stages)
+- name: attribution
+  primary_key: [dd_stage_id, dd_session_id]
+  field_count: 15
+  description: >-
+    Credit assigned to each session touchpoint that contributed to a stage journey. Session-level
+    only — no event columns. One row per stage, session touchpoint and attribution model.
+  notable_fields: [dd_session_activity_id, timestamp, quantity, dd_visitor_id, dd_tracking_type, stage, session, source_system, attribution, row_checksum]
+  relationships:
+  - type: belongs_to
+    target: stages
+    via: dd_stage_id
+  - type: belongs_to
+    target: contacts
+    via: dd_contact_id
+  - type: belongs_to
+    target: companies
+    via: dd_company_id
+- name: spend
+  primary_key: null
+  field_count: 12
+  description: >-
+    Ad cost, impressions and clicks joined to the same channel/source dimensions as events and
+    attribution, for ROI and ROAS.
+  notable_fields: [timestamp, cost, impressions, clicks, channel, source, ad_account, ad_hierarchy, context, source_system, row_checksum]
+  relationships:
+  - type: joins
+    target: events
+    via: channel / source (session.channel, session.spend_source)
+  - type: joins
+    target: attribution
+    via: channel / source
+ingestion_model:
+  note: >-
+    The write side is the Segment-compatible event envelope, not these tables. Inbound events
+    (track/page/identify/group/alias) resolve into contacts + companies and land as rows in
+    events; see conventions/dreamdata-conventions.yml.
+  cross_link: conventions/dreamdata-conventions.yml
+deprecated_fields:
+- table: events
+  field: dd_is_primary_event
+  note: "LEGACY (deprecated for counting) — use dd_session_activity_id"
+- table: attribution
+  field: dd_is_primary_event
+  note: "LEGACY (deprecated for counting) — use dd_session_activity_id"
+- table: spend
+  field: adNetwork
+  note: "Deprecated: use source for the origin of the spend"

@@ -1,53 +1,149 @@
-generated: '2026-07-18'
+generated: '2026-08-13'
 method: searched
 status: published
 source: https://developer.dreamdata.io/mcp/mcp-server/
+checked: '2026-08-13'
 server:
   name: dreamdata
   transport: http
   url: https://mcp.dreamdata.io/mcp
+  maturity: beta
+  maturity_note: >-
+    The provider labels the server "Beta" on its own docs page — "It may contain bugs and
+    experience instability until it reaches general availability, and tools may change."
+    Feedback address mcp-feedback@dreamdata.io.
+deployment:
+  mode: remote
+  endpoint: https://mcp.dreamdata.io/mcp
+  auth: oauth
+  verified: probed
+  probe: gated
+  probe_detail: >-
+    POST tools/list to https://mcp.dreamdata.io/mcp with Accept: application/json,
+    text/event-stream returned HTTP 401 with
+    WWW-Authenticate: Bearer error="invalid_token",
+    resource_metadata="https://mcp.dreamdata.io/.well-known/oauth-protected-resource/mcp".
+    The endpoint is live and correctly challenges anonymous callers; the live tool schemas
+    require an authenticated introspection, so the tool list below is the provider's own
+    published catalog (names + descriptions), not a tools/list capture.
+  checked: '2026-08-13'
+  install: null
+  package: null
 auth:
   type: oauth2.1
   pkce: S256
+  pkce_required: true
   authorization_endpoint: https://authenticate.dreamdata.io/oauth/2.1/authorize
   token_endpoint: https://authenticate.dreamdata.io/oauth/2.1/token
   registration_endpoint: https://authenticate.dreamdata.io/oauth/2.1/register
+  protected_resource_metadata: https://mcp.dreamdata.io/.well-known/oauth-protected-resource/mcp
+  authorization_server_metadata: https://mcp.dreamdata.io/.well-known/oauth-authorization-server
+  bearer_methods: [header]
   scopes:
   - read
   - reports:write
   consent:
   - name: Read Dreamdata Resources
+    scope: read
     required: true
+    description: Read reports, customer journeys, and audiences.
   - name: Save Dreamdata Reports
+    scope: reports:write
     required: false
+    description: >-
+      Save new reports the agent builds to the Analytics Hub. Cannot modify or delete existing
+      reports; the client is expected to confirm with the user before each save.
+  note: >-
+    OAuth 2.1 with SHA-256 PKCE is mandatory — the docs state clients that do not support
+    OAuth 2.1 or S256 PKCE cannot connect. Dynamic client registration is advertised, but the
+    docs also say the server "recognises Claude, Claude Code, Lovable, Cursor and ChatGPT" and
+    that other clients must be listed by contacting mcp-feedback@dreamdata.io.
 clients:
-- Claude
-- Cursor
-- ChatGPT
-- Lovable
+- name: Claude
+  method: connector directory (published) or custom connector by URL
+- name: Claude Code
+  method: claude mcp add --transport http dreamdata https://mcp.dreamdata.io/mcp
+- name: Cursor
+  method: 'mcp.json: "dreamdata": { "url": "https://mcp.dreamdata.io/mcp" }'
+- name: ChatGPT
+  method: Settings > Connectors > Create, developer mode required
+- name: Lovable
+  method: Connectors > Chat connectors, add server URL
 tool_groups:
 - name: Run and explore reports
   tools:
-  - run_saved_report
-  - run_saved_report_for_date_range
-  - list_saved_reports
-  - list_report_metric_drilldown_entities
+  - name: run_saved_report
+    description: Fetch and display the results from a saved Analytics Hub report.
+  - name: run_saved_report_for_date_range
+    description: Run a saved report over a custom date range without changing the saved report.
+  - name: list_saved_reports
+    description: Browse the catalog of saved Analytics Hub reports in the account.
+  - name: list_report_metric_drilldown_entities
+    description: Drill into the contacts, companies, stages or deals behind a metric value in a report.
 - name: Locate companies
   tools:
-  - list_my_accounts
-  - run_audience_query
-  - list_audiences
-  - get_audience_definition
-- name: Understand company journeys
+  - name: list_my_accounts
+    description: List the Dreamdata accounts the authenticated user can access.
+  - name: run_audience_query
+    description: Find the companies or contacts matching stated criteria (firmographics, events/signals, pipeline stages, time windows).
+  - name: list_audiences
+    description: Browse the catalog of saved audiences in the account.
+  - name: get_audience_definition
+    description: Reuse an audience already saved in Dreamdata.
+  - name: list_audience_filter_properties
+    description: Discovery — what the account can filter on (company, contact and event properties plus pipeline stages per revenue model).
+  - name: list_audience_filter_values
+    description: Discovery — the exact values a filter accepts.
+  - name: describe_audience_config_schema
+    description: Discovery — the full structure for building more complex audience definitions.
+- name: Understand a company's journey
   tools:
-  - search_companies
-  - get_company_journey
-  - list_company_journey_stages
-- name: Build reports from scratch
+  - name: search_companies
+    description: Look a company up by name.
+  - name: get_company_journey
+    description: Fetch a company's full journey — summary, contacts, sessions and touchpoints.
+  - name: list_company_journey_stages
+    description: Show which pipeline stages a company reached, when, and at what value.
+- name: Build a report from scratch
   tools:
-  - report_builder_start
-  - report_builder_run_config
-  - report_builder_save_report
+  - name: report_builder_start
+    description: Start the guided report-building flow and list the analysis types the account can build on.
+  - name: report_builder_list_analysis_types
+    description: Discovery — available analysis types.
+  - name: report_builder_list_subjects
+    description: Discovery — available report subjects.
+  - name: report_builder_get_components
+    description: Discovery — metrics, filters and segmentation available for the report.
+  - name: report_builder_resolve_calendar_period
+    description: Translate a calendar period such as "Q1 2025" into the report's time window.
+  - name: report_builder_resolve_rolling_window
+    description: Translate a rolling period such as "the last 45 days" into the report's time window.
+  - name: report_builder_list_property_values
+    description: Discovery — list the filter values available for a property.
+  - name: report_builder_search_property_values
+    description: Discovery — search for the exact filter value to use.
+  - name: report_builder_run_config
+    description: Validate and run the assembled report configuration and return results.
+  - name: report_builder_save_report
+    description: Save a built report to the Analytics Hub. Requires the optional reports:write consent and a user confirmation.
+tool_count: 21
+errors:
+  source: https://developer.dreamdata.io/mcp/mcp-server/
+  cross_link: errors/dreamdata-error-codes.yml
+  codes:
+  - status: 401
+    meaning: Session expired or token invalid. Disconnect and reconnect the connector to re-authenticate.
+  - status: 403
+    meaning: Authenticated but not a member of the Dreamdata account being queried. Run list_my_accounts or contact the account owner.
+  - status: 502
+    meaning: The Dreamdata internal API is unreachable — server-side; contact mcp-feedback@dreamdata.io.
+  - status: null
+    message: MCP server is not enabled for this user. Contact your Dreamdata account owner
+    meaning: Account-level entitlement missing — no tools appear after connecting.
 notes: >-
-  Official hosted/remote MCP server exposing 20+ tools. No local install required; users
-  add it as a custom connector in an MCP-aware assistant and authorize via OAuth 2.1 PKCE.
+  Official hosted/remote MCP server, one URL for every account, with per-request account
+  selection for users who belong to several Dreamdata accounts. No local install and no stdio
+  package exists — this is a remote agent surface, reachable today by any OAuth 2.1 + S256
+  client. The tool catalog above is transcribed from the provider's published tool tables; the
+  live tools/list schemas are auth-gated (401) and would need an authenticated introspection
+  to capture.

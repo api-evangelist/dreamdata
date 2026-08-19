@@ -1,0 +1,53 @@
+generated: '2026-08-13'
+method: searched
+source: >-
+  https://dreamdata.io/sitemap.xml + https://developer.dreamdata.io/blog +
+  probes of dreamdata.io/changelog, /product-updates, /releases
+checked: '2026-08-13'
+published_changelog: false
+entry_count: 0
+scheme: none
+probes:
+- url: https://dreamdata.io/changelog
+  status: 404
+- url: https://dreamdata.io/product-updates
+  status: 404
+- url: https://dreamdata.io/releases
+  status: 404
+- url: https://developer.dreamdata.io/blog
+  status: 200
+  note: >-
+    A Docusaurus blog route exists on the developer docs site and renders, but it has no posts —
+    the page body contains only the site chrome. There is no developer-facing release feed.
+- url: https://docs.dreamdata.io/sitemap.xml
+  status: 200
+  note: 272 URLs, none of them a changelog, release-notes or what's-new page.
+closest_equivalent:
+  kind: marketing blog series
+  name: "Product Update"
+  index: https://dreamdata.io/blog
+  posts:
+  - https://dreamdata.io/blog/product-update-september-2024
+  - https://dreamdata.io/blog/product-update-july24
+  - https://dreamdata.io/blog/product-update-monthly-summary-reports-to-your-email-branded-filter-new
+  - https://dreamdata.io/blog/product-update-google-connected-sheet-data-driven-attribution
+  - https://dreamdata.io/blog/product-update-dreamdata-chrome-extension
+  - https://dreamdata.io/blog/product-update-linkedin-ads-and-stage-model-configurator
+  - https://dreamdata.io/blog/product-update-custom-stage-models-user-access-control
+  - https://dreamdata.io/blog/product-update-shared-reports-and-real-time-view
+  - https://dreamdata.io/blog/product-update-october23
+  note: >-
+    Nine posts announcing product changes, the most recent one titled "September 2024". They
+    are undated in the sitemap in any trustworthy way (lastmod reflects CMS re-renders, not
+    publication), they cover UI features rather than API changes, and the series appears to
+    have stopped. No entry names a version, a breaking change or a migration.
+api_versioning:
+  scheme: uri-path
+  current: v1
+  cross_link: lifecycle/dreamdata-lifecycle.yml
+notes: >-
+  Dreamdata publishes no changelog, no release notes and no what's-new feed for any of its
+  three developer surfaces (tracking API, webhook syncs, MCP server). The MCP docs explicitly
+  warn that "tools may change" while the server is in Beta, and there is no published record
+  where that change would be announced. Recorded as an honest zero: no ChangeLog pointer is
+  wired in apis.yml, because a stalled marketing blog series is not a changelog.

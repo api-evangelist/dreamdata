@@ -1,0 +1,1494 @@
+{
+  "attribution": [
+    {
+      "name": "dd_stage_id",
+      "type": "STRING",
+      "description": "Stage in the journey (Combined Primary Key). Foreign key to stages."
+    },
+    {
+      "name": "dd_session_id",
+      "type": "STRING",
+      "description": "Session touchpoint for this row (Combined Primary Key with dd_stage_id). Same meaning as dd_session_id on events. Not for session counts\u2014use dd_session_activity_id."
+    },
+    {
+      "name": "dd_session_activity_id",
+      "type": "STRING",
+      "description": "Identifies a single session. Shared across a contact's company copies\u2014the same value on every company row for that session, so it is NOT unique per company\u2014and NULL on exposure rows (impressions). Session counts: COUNT(DISTINCT dd_session_activity_id) counts each session once instead of once per company; impressions are excluded automatically, so no tracking-type filter is needed. Same as on the events table."
+    },
+    {
+      "name": "timestamp",
+      "type": "TIMESTAMP",
+      "description": "Timestamp the session started"
+    },
+    {
+      "name": "quantity",
+      "type": "INTEGER",
+      "description": "Number of times the event was observed. 1 for most events, but exposure based events like linkedin_ad_impression will have quantity different from 1"
+    },
+    {
+      "name": "dd_visitor_id",
+      "type": "STRING",
+      "description": "Anonymized identifier for a visitor within the Dreamdata system. For identified visitors the dd_visitor_id will be equal to the dd_contact_id. (same as events table)"
+    },
+    {
+      "name": "dd_contact_id",
+      "type": "STRING",
+      "description": "Unique identifier for the contact associated with the session (foreign key referencing dd_contact_id in the contacts schema)."
+    },
+    {
+      "name": "dd_company_id",
+      "type": "STRING",
+      "description": "Unique identifier for the company associated with the session (foreign key referencing dd_company_id in the company schema)."
+    },
+    {
+      "name": "dd_tracking_type",
+      "type": "STRING",
+      "description": "Tracking type of the session touchpoint. 'activity': standard actions. 'exposure': impression-style events such as linkedin_ad_impression. Session counts use COUNT(DISTINCT dd_session_activity_id), which already excludes exposures (their activity ids are NULL)\u2014no filter on this column is needed. For impression totals use SUM(quantity)."
+    },
+    {
+      "name": "dd_is_primary_event",
+      "type": "BOOLEAN",
+      "description": "LEGACY (deprecated for counting): Same as on the events table. Use dd_session_activity_id for session counts instead."
+    },
+    {
+      "name": "stage",
+      "type": "RECORD",
+      "fields": [
+        {
+          "name": "name",
+          "type": "STRING",
+          "description": "Name of the stage."
+        },
+        {
+          "name": "stage_model_id",
+          "type": "STRING"
+        },
+        {
+          "name": "timestamp",
+          "type": "TIMESTAMP",
+          "description": "Timestamp when the stage was reached."
+        },
+        {
+          "name": "value",
+          "type": "FLOAT",
+          "description": "Value indicating the revenue associated with reaching the stage."
+        }
+      ],
+      "description": "Record with information about the stage (dd_stage_id) associated with the session"
+    },
+    {
+      "name": "session",
+      "type": "RECORD",
+      "fields": [
+        {
+          "name": "channel",
+          "type": "STRING",
+          "description": "Channel of the session. Mapped field: This is either defined at input or mapped combining info from different fields. See Dreamdata Data Hub UI to customize mapping outside of the Dreamdata default mappings"
+        },
+        {
+          "name": "source",
+          "type": "STRING",
+          "description": "Source of the session. Mapped field: This is either defined at input or mapped combining info from different fields. See Dreamdata Data Hub UI to customize mapping outside of the Dreamdata default mappings."
+        },
+        {
+          "name": "campaign",
+          "type": "STRING",
+          "description": "Campaign of the session. Mapped field: This is either defined at input or mapped combining info from different fields."
+        },
+        {
+          "name": "medium",
+          "type": "STRING",
+          "description": "Medium of the session. Mapped field: This is either defined at input or mapped combining info from different fields."
+        },
+        {
+          "name": "term",
+          "type": "STRING",
+          "description": "Term of the session, set using a match with paid UTM parameter IDs or set using utm_term."
+        },
+        {
+          "name": "keyword",
+          "type": "STRING",
+          "description": "Keyword of the session, set using a match with paid UTM parameter IDs."
+        },
+        {
+          "name": "match_type",
+          "type": "STRING",
+          "description": "Match type e.g. 'EXACT', 'PHRASE', 'BROAD' etc"
+        },
+        {
+          "name": "visitor_country",
+          "type": "STRING",
+          "description": "Country of the Visitor of the session. Differs from the contact's country by including anonymous visitors. For known contacts, this is equal to the contact's country."
+        },
+        {
+          "name": "landing_page",
+          "type": "STRING",
+          "description": "Landing page URL of the session without UTM parameters."
+        },
+        {
+          "name": "landing_page_url",
+          "type": "STRING",
+          "description": "Raw landing page URL of the session including UTM parameters."
+        },
+        {
+          "name": "landing_page_content_category",
+          "type": "STRING",
+          "description": "Content category of the landing page URL of the session. The definitions of content categories are setup using the Dreamdata Data Hub UI"
+        },
+        {
+          "name": "host",
+          "type": "STRING",
+          "description": "Domain of the landing page URL of the session."
+        },
+        {
+          "name": "referrer_clean",
+          "type": "STRING",
+          "description": "Cleaned referrer URL of the session without UTM parameters."
+        },
+        {
+          "name": "referrer",
+          "type": "STRING",
+          "description": "Raw referrer URL of the session including UTM parameters."
+        },
+        {
+          "name": "browser",
+          "type": "STRING",
+          "description": "Browser used to start the session."
+        },
+        {
+          "name": "device",
+          "type": "STRING",
+          "description": "Device type used to start the session."
+        },
+        {
+          "name": "os",
+          "type": "STRING",
+          "description": "Operating system used to start the session."
+        },
+        {
+          "name": "first_event_name",
+          "type": "STRING",
+          "description": "Name of the first event in the session."
+        },
+        {
+          "name": "contain_conversion",
+          "type": "BOOLEAN",
+          "description": "Flag indicating if the session contains an event labeled as a conversion. The definitions of conversions are setup using the Dreamdata Data Hub UI"
+        },
+        {
+          "name": "first_conversion_name",
+          "type": "STRING",
+          "description": "Name of the first conversion in the session. The definitions of conversions are setup using the Dreamdata Data Hub UI"
+        },
+        {
+          "name": "spend_source",
+          "type": "STRING",
+          "description": "The source of the spend associated with this session. Is a reference to the source column in the spend table"
+        },
+        {
+          "name": "spend_type",
+          "type": "STRING",
+          "description": "The type of the spend associated with this session. Is a reference to the source_system.type column in the spend table"
+        },
+        {
+          "name": "spend_data_source",
+          "type": "STRING",
+          "description": "The data source of the spend associated with this session. Is a reference to the source_system.source column in the spend table"
+        },
+        {
+          "name": "dd_brand_search_label",
+          "type": "STRING",
+          "description": "Branded search label i.e. 'Brand', 'Non-Brand', defined in the Dreamdata platform. Is a reference to the dd_brand_search_labelcolumn in the spend table"
+        },
+        {
+          "name": "google_advertising_channel",
+          "type": "STRING",
+          "description": "Google advertising channel type from Google's network/campaign classification e.g. 'Search', 'Display', 'Video', 'Demand_Gen'. Is a reference to the google_advertising_channel column in the spend table"
+        },
+        {
+          "name": "ad_hierarchy",
+          "type": "RECORD",
+          "fields": [
+            {
+              "name": "ad_account",
+              "type": "RECORD",
+              "fields": [
+                {
+                  "name": "name",
+                  "type": "STRING",
+                  "description": "Name of the ad account"
+                },
+                {
+                  "name": "id",
+                  "type": "STRING",
+                  "description": "Unique identifier for the ad account within the network"
+                }
+              ],
+              "description": "Record containing information about the ad account"
+            },
+            {
+              "name": "level_1",
+              "type": "RECORD",
+              "fields": [
+                {
+                  "name": "network_label",
+                  "type": "STRING",
+                  "description": "Network-specific label for the first level i.e. 'campaign' for Google, Meta, and LinkedIn."
+                },
+                {
+                  "name": "name",
+                  "type": "STRING",
+                  "description": "Name of the first level i.e. the name of the Google campaign."
+                },
+                {
+                  "name": "id",
+                  "type": "STRING",
+                  "description": "Unique identifier for the first level within the network."
+                }
+              ],
+              "description": "Top level for ads on the specific network"
+            },
+            {
+              "name": "level_2",
+              "type": "RECORD",
+              "fields": [
+                {
+                  "name": "network_label",
+                  "type": "STRING",
+                  "description": "Network-specific label for the second level i.e. 'ad group' for Google, 'ad set' for Meta and LinkedIn."
+                },
+                {
+                  "name": "name",
+                  "type": "STRING",
+                  "description": "Name of the second level i.e. the name of the Google ad group."
+                },
+                {
+                  "name": "id",
+                  "type": "STRING",
+                  "description": "Unique identifier for the second level within the network."
+                }
+              ],
+              "description": "Second level for ads on the specific network"
+            }
+          ],
+          "description": "Record containing information about the ad hierarchy detected, with specific network labels and IDs: These are filled in using matches with UTM parameters of the session. The id's in this record can be connected to the similar record in the spend table."
+        }
+      ],
+      "description": "Record containing session-level information. Attribution is based on session parameters."
+    },
+    {
+      "name": "source_system",
+      "type": "RECORD",
+      "fields": [
+        {
+          "name": "id",
+          "type": "STRING",
+          "description": "Id for the event in the source system. For analytics sources this will be the message identifier."
+        },
+        {
+          "name": "source",
+          "type": "STRING",
+          "description": "Name of the source system of the event."
+        }
+      ],
+      "description": "Record containing information about the source of the data"
+    },
+    {
+      "name": "attribution",
+      "type": "RECORD",
+      "mode": "REPEATED",
+      "fields": [
+        {
+          "name": "model",
+          "type": "STRING",
+          "description": "Name of attribution model used. An attribution model is uniquely defined by its name."
+        },
+        {
+          "name": "weight",
+          "type": "FLOAT",
+          "description": "Weight assigned using the attribution model. This will be a number between 0 and 1."
+        },
+        {
+          "name": "value",
+          "type": "FLOAT",
+          "description": "Value assigned using the attribution model weight. Calculated as attribution weight times the value of the stage."
+        }
+      ],
+      "description": "Array containing attribution for the session (dd_session_id) in the particular stage journey (dd_stage_id) according to each attribution model. Attribution models and exclusions are configured in the Dreamdata Data Hub UI"
+    },
+    {
+      "name": "row_checksum",
+      "type": "STRING",
+      "description": "Checksum for the row. If any value in the row changes, the checksum changes otherwise it is unchanged. This should only be used to setup incremental table updates."
+    }
+  ],
+  "companies": [
+    {
+      "name": "dd_company_id",
+      "type": "STRING",
+      "description": "Id for the company within the Dreamdata system (Primary key)"
+    },
+    {
+      "name": "domain",
+      "type": "STRING",
+      "description": "Company domain"
+    },
+    {
+      "name": "all_domains",
+      "type": "STRING",
+      "mode": "REPEATED",
+      "description": "List of all domains associated with the company. This defines which anonymous events (events with only a company domain) are associated with the company."
+    },
+    {
+      "name": "account_owner",
+      "type": "RECORD",
+      "fields": [
+        {
+          "name": "email",
+          "type": "STRING",
+          "description": "Account owner email address from primary CRM"
+        },
+        {
+          "name": "name",
+          "type": "STRING",
+          "description": " Account owner name from primary CRM"
+        }
+      ],
+      "description": "Record containing info about the account owner in the primary CRM. Will be empty if company is not found in primary CRM."
+    },
+    {
+      "name": "properties",
+      "type": "RECORD",
+      "fields": [
+        {
+          "name": "created_date",
+          "type": "TIMESTAMP",
+          "description": "Date when the company record was created"
+        },
+        {
+          "name": "name",
+          "type": "STRING",
+          "description": "Company name"
+        },
+        {
+          "name": "country",
+          "type": "STRING",
+          "description": "Company country"
+        },
+        {
+          "name": "industry",
+          "type": "STRING",
+          "description": "Industry the company belongs to"
+        },
+        {
+          "name": "annual_revenue",
+          "type": "STRING",
+          "description": "Binned annual revenue of the company."
+        },
+        {
+          "name": "number_of_employees",
+          "type": "STRING",
+          "description": "Binned number of employees at the company."
+        },
+        {
+          "name": "linkedin_url",
+          "type": "STRING",
+          "description": "Company's LinkedIn profile URL."
+        },
+        {
+          "name": "is_from_primary_crm",
+          "type": "BOOLEAN",
+          "description": "Flag indicating if the record originated from the primary CRM system"
+        },
+        {
+          "name": "is_anonymous_company",
+          "type": "BOOLEAN",
+          "description": "Flag indicating if the company is anonymous. An anonymous company is one that is not from the primary CRM and does not have any contacts with a business email associated. Most company counts in the Dreamdata UI are make using is_anonymous_company = FALSE i.e. not including anonymous companies."
+        },
+        {
+          "name": "engagement_score",
+          "type": "FLOAT",
+          "description": "Engagement score for the company within the last 30 days (0-1). This value is automatically calculated by the Dreamdata platform based on the company\u2019s activities within the last 30 days"
+        }
+      ],
+      "description": "Record containing company properties. The properties are combined from the different source integrations using waterfall enrichment prioritizing 1. The primary CRM 2. Other integrations including active intent providers 3. Dreamdata's proprietary AI enrichment and labeling."
+    },
+    {
+      "name": "custom_properties",
+      "type": "JSON",
+      "description": "Custom company properties in JSON format. These are the selected properties from the primary CRM. Which properties are included is controlled through the Dreamdata source UI"
+    },
+    {
+      "name": "source_system",
+      "type": "RECORD",
+      "mode": "REPEATED",
+      "fields": [
+        {
+          "name": "id",
+          "type": "STRING",
+          "description": "Id for the object record in the source system. This will not necessarily match the 'dd_' id, but is useful for locating records in the source systems directly"
+        },
+        {
+          "name": "source",
+          "type": "STRING",
+          "description": "Name of the source system like hubspot, salesforce, etc."
+        },
+        {
+          "name": "object",
+          "type": "STRING",
+          "description": "The name of the object in the source system like companies, accounts, etc."
+        },
+        {
+          "name": "object_url",
+          "type": "STRING",
+          "description": "The URL to the object in the source system"
+        },
+        {
+          "name": "created_date",
+          "type": "TIMESTAMP",
+          "description": "The created date of the object in the source system"
+        }
+      ],
+      "description": "Array containing the source systems in which the company was found."
+    },
+    {
+      "name": "audiences",
+      "type": "RECORD",
+      "mode": "REPEATED",
+      "fields": [
+        {
+          "name": "dd_audience_id",
+          "type": "STRING",
+          "description": "Id of the audience within the Dreamdata platform. This uniquely defines the audience"
+        },
+        {
+          "name": "name",
+          "type": "STRING",
+          "description": "Name of the audience"
+        },
+        {
+          "name": "created_date",
+          "type": "TIMESTAMP",
+          "description": "Date for the creation of the audience"
+        },
+        {
+          "name": "description",
+          "type": "STRING",
+          "description": "Description of the audience given within the Dreamdata UI."
+        }
+      ],
+      "description": "Array containing the audiences the company is part of. Audiences can be defined using the no-code audience builder in the Dreamdata UI and will be automatically updated."
+    },
+    {
+      "name": "row_checksum",
+      "type": "STRING",
+      "description": "Checksum for the row. If any value in the row changes, the checksum changes otherwise it is unchanged. This should only be used to setup incremental table updates."
+    }
+  ],
+  "contacts": [
+    {
+      "name": "dd_contact_id",
+      "type": "STRING",
+      "description": "Unique identifier for the contact within Dreamdata. An anonymized hash or the email. (Primary key)"
+    },
+    {
+      "name": "email",
+      "type": "STRING",
+      "description": "Contact's primary email address. (Primary key)"
+    },
+    {
+      "name": "properties",
+      "type": "RECORD",
+      "fields": [
+        {
+          "name": "created_date",
+          "type": "TIMESTAMP",
+          "description": "Date when the contact record was created"
+        },
+        {
+          "name": "name",
+          "type": "STRING",
+          "description": "Contact's full name"
+        },
+        {
+          "name": "first_name",
+          "type": "STRING",
+          "description": "Contact's first name"
+        },
+        {
+          "name": "last_name",
+          "type": "STRING",
+          "description": "Contact's last name"
+        },
+        {
+          "name": "phone_number",
+          "type": "STRING",
+          "description": "Contact's phone number"
+        },
+        {
+          "name": "title",
+          "type": "STRING",
+          "description": "Contact's job title"
+        },
+        {
+          "name": "role",
+          "type": "STRING",
+          "description": "Contact's professional role."
+        },
+        {
+          "name": "seniority",
+          "type": "STRING",
+          "description": "Contact's seniority level"
+        },
+        {
+          "name": "country",
+          "type": "STRING",
+          "description": "Contact's primary country"
+        },
+        {
+          "name": "email_domain",
+          "type": "STRING",
+          "description": "Domain name of the contact's email address"
+        },
+        {
+          "name": "additional_emails",
+          "type": "STRING",
+          "mode": "REPEATED",
+          "description": "List of additional email addresses associated with the contact. Only used if the primary CRM supports additional emails"
+        },
+        {
+          "name": "is_corporate_email",
+          "type": "BOOLEAN",
+          "description": "Flag indicating if the email address belongs to a corporate/business domain. False will indicate that it is a free email domain like gmail, hotmail etc."
+        },
+        {
+          "name": "is_from_primary_crm",
+          "type": "BOOLEAN",
+          "description": "Flag indicating if the record originated from the primary CRM system"
+        }
+      ],
+      "description": "Record containing contact properties. The properties are combined from the different source integrations using waterfall enrichment prioritizing 1. The primary CRM 2. Other integrations including active intent providers 3. Dreamdata's proprietary AI enrichment and labeling."
+    },
+    {
+      "name": "source_system",
+      "type": "RECORD",
+      "mode": "REPEATED",
+      "fields": [
+        {
+          "name": "id",
+          "type": "STRING",
+          "description": "Id for the object record in the source system. This will not necessarily match the 'dd_' id, but is useful for locating records in the source systems directly"
+        },
+        {
+          "name": "source",
+          "type": "STRING",
+          "description": "Name of the source system like hubspot, salesforce, etc."
+        },
+        {
+          "name": "object",
+          "type": "STRING",
+          "description": "The name of the object in the source system like contacts, leads, etc."
+        },
+        {
+          "name": "object_url",
+          "type": "STRING",
+          "description": "The URL to the object in the source system"
+        },
+        {
+          "name": "created_date",
+          "type": "TIMESTAMP",
+          "description": "The created date of the object in the source system"
+        }
+      ],
+      "description": "Array containing the source systems in which the contact was found."
+    },
+    {
+      "name": "custom_properties",
+      "type": "JSON",
+      "description": "Custom contact properties in JSON format. These are the selected properties from the primary CRM. Which properties are included is controlled through the Dreamdata source UI"
+    },
+    {
+      "name": "companies",
+      "type": "RECORD",
+      "mode": "REPEATED",
+      "fields": [
+        {
+          "name": "dd_company_id",
+          "type": "STRING",
+          "description": "Id for the company (foreign key referencing dd_company_id in the company schema)"
+        },
+        {
+          "name": "name",
+          "type": "STRING",
+          "description": "Company name"
+        },
+        {
+          "name": "domain",
+          "type": "STRING",
+          "description": "Company domain"
+        },
+        {
+          "name": "is_primary_company",
+          "type": "BOOLEAN",
+          "description": "Flag indicating if the company is the primary company associated with the contact. The primary company is used when stages are only associated with a contact. Then it will automatically be associated with the primary company for conversion rate calculations"
+        }
+      ],
+      "description": "Array containing all of the companies associated with the contact"
+    },
+    {
+      "name": "audiences",
+      "type": "RECORD",
+      "mode": "REPEATED",
+      "fields": [
+        {
+          "name": "dd_audience_id",
+          "type": "STRING",
+          "description": "Id of the audience within the Dreamdata platform. This uniquely defines the audience"
+        },
+        {
+          "name": "name",
+          "type": "STRING",
+          "description": "Name of the audience"
+        },
+        {
+          "name": "created_date",
+          "type": "TIMESTAMP",
+          "description": "Date for the creation of the audience"
+        },
+        {
+          "name": "description",
+          "type": "STRING",
+          "description": "Description of the audience given within the Dreamdata UI."
+        }
+      ],
+      "description": "Array containing the audiences the contact is part of. Audiences can be defined using the no-code audience builder in the Dreamdata UI and will be automatically updated."
+    },
+    {
+      "name": "row_checksum",
+      "type": "STRING",
+      "description": "Checksum for the row. If any value in the row changes, the checksum changes otherwise it is unchanged. This should only be used to setup incremental table updates."
+    }
+  ],
+  "events": [
+    {
+      "name": "dd_event_id",
+      "type": "STRING",
+      "description": "Primary key. Unique per row, so one per company copy when a contact belongs to several companies. Use for joins and drill-down to a specific copy\u2014not for event counts (use dd_event_activity_id)."
+    },
+    {
+      "name": "dd_event_activity_id",
+      "type": "STRING",
+      "description": "Identifies a single event occurrence (e.g. one page view). Shared across a contact's company copies\u2014the same value on every company row for that occurrence, so it is NOT unique per company\u2014and NULL on exposure rows (impressions). Event counts: COUNT(DISTINCT dd_event_activity_id) counts each occurrence once instead of once per company; impressions are excluded automatically, so no tracking-type filter is needed. Count impressions with SUM(quantity); see dd_tracking_type."
+    },
+    {
+      "name": "dd_session_id",
+      "type": "STRING",
+      "description": "Session identifier for this row. Unique per row, so one per company copy. Equals dd_event_id when the session has one event; otherwise the dd_event_id of the first event in the session on this row. Not for session counts (use dd_session_activity_id)."
+    },
+    {
+      "name": "dd_session_activity_id",
+      "type": "STRING",
+      "description": "Identifies a single session. Shared across a contact's company copies\u2014the same value on every row in that session, so it is NOT unique per company\u2014and NULL on exposure rows (impressions). Session counts: COUNT(DISTINCT dd_session_activity_id) counts each session once instead of once per company; impressions are excluded automatically, so no tracking-type filter is needed. Often equals dd_event_activity_id when the session has only one event."
+    },
+    {
+      "name": "event_name",
+      "type": "STRING",
+      "description": "Name of the event e.g., 'page_view', 'form_submit'"
+    },
+    {
+      "name": "timestamp",
+      "type": "TIMESTAMP",
+      "description": "Timestamp the event occurred"
+    },
+    {
+      "name": "quantity",
+      "type": "INTEGER",
+      "description": "Times the event was observed (1 for most events; higher for exposures such as linkedin_ad_impression). With dd_tracking_type = 'exposure', use SUM(quantity) instead of counting distinct ids."
+    },
+    {
+      "name": "dd_visitor_id",
+      "type": "STRING",
+      "description": "Anonymized identifier for a visitor within the Dreamdata system. For identified visitors the dd_visitor_id will be equal to the dd_contact_id. This field is used to calculate the Visitor count as COUNT( DISTINCT dd_pseudo_visitor_id)"
+    },
+    {
+      "name": "dd_contact_id",
+      "type": "STRING",
+      "description": "Unique identifier for the contact associated with the event (foreign key referencing dd_contact_id in the contacts schema)"
+    },
+    {
+      "name": "dd_company_id",
+      "type": "STRING",
+      "description": "Company for this row (foreign key to companies). When a contact is linked to multiple companies, the same event occurrence appears on one row per company\u2014see table description and dd_event_activity_id."
+    },
+    {
+      "name": "dd_tracking_type",
+      "type": "STRING",
+      "description": "Tracking type of the event. 'activity': standard actions (page views, form submits, etc.). 'exposure': impression-style events such as linkedin_ad_impression. Event and session counts use COUNT(DISTINCT dd_event_activity_id) / COUNT(DISTINCT dd_session_activity_id), which already exclude exposures (their activity ids are NULL)\u2014no filter on this column is needed. For impression totals use SUM(quantity)."
+    },
+    {
+      "name": "dd_event_session_order",
+      "type": "INTEGER",
+      "description": "Order of the event within the session. To obtain the first event of each session use 'WHERE dd_event_session_order = 1'"
+    },
+    {
+      "name": "dd_is_primary_event",
+      "type": "BOOLEAN",
+      "description": "LEGACY (deprecated for counting): TRUE on the primary-company row when a contact has multiple companies (TRUE when no contact). Older SQL used WHERE dd_is_primary_event before counting dd_event_id; use dd_event_activity_id and dd_session_activity_id instead. Not used for stages, attribution, or influenced-stage analysis."
+    },
+    {
+      "name": "event",
+      "type": "RECORD",
+      "fields": [
+        {
+          "name": "url_clean",
+          "type": "STRING",
+          "description": "Cleaned URL without UTM parameters."
+        },
+        {
+          "name": "url",
+          "type": "STRING",
+          "description": "Raw URL including UTM parameters."
+        },
+        {
+          "name": "referrer_clean",
+          "type": "STRING",
+          "description": "Cleaned referrer URL without UTM parameters."
+        },
+        {
+          "name": "referrer",
+          "type": "STRING",
+          "description": "Raw referrer URL including UTM parameters."
+        },
+        {
+          "name": "utm_medium",
+          "type": "STRING",
+          "description": "UTM medium parameter. This is extracted from the url. For unified mapped field see session.medium."
+        },
+        {
+          "name": "utm_campaign",
+          "type": "STRING",
+          "description": "UTM campaign parameter. This is extracted from the url. For unified mapped field see session.campaign."
+        },
+        {
+          "name": "utm_source",
+          "type": "STRING",
+          "description": "UTM source parameter. This is extracted from the url. For unified mapped field see session.source."
+        },
+        {
+          "name": "utm_term",
+          "type": "STRING",
+          "description": "UTM term parameter. This is extracted from the url. For unified mapped field see session.term."
+        },
+        {
+          "name": "host",
+          "type": "STRING",
+          "description": "Domain of the URL where the event occurred."
+        },
+        {
+          "name": "browser",
+          "type": "STRING",
+          "description": "Browser used."
+        },
+        {
+          "name": "browser_version",
+          "type": "STRING",
+          "description": "Browser version used."
+        },
+        {
+          "name": "device",
+          "type": "STRING",
+          "description": "Device type used."
+        },
+        {
+          "name": "os",
+          "type": "STRING",
+          "description": "Operating system used."
+        },
+        {
+          "name": "os_version",
+          "type": "STRING",
+          "description": "Operating system version used."
+        },
+        {
+          "name": "campaign",
+          "type": "STRING",
+          "description": "Campaign of the event. Mapped field: This is either defined at input or mapped combining info from different fields such as utm_campaign. The campaign driving the event in an attribution context is the campaign of the session i.e. the campaign responsible for starting the session containing the event."
+        },
+        {
+          "name": "medium",
+          "type": "STRING",
+          "description": "Medium of the event. Mapped field: This is either defined at input or mapped combining info from different fields such as utm_medium."
+        },
+        {
+          "name": "term",
+          "type": "STRING",
+          "description": "Term set using a match with paid UTM parameter IDs or set using utm_term."
+        },
+        {
+          "name": "keyword",
+          "type": "STRING",
+          "description": "Keyword set using a match with paid UTM parameter IDs."
+        },
+        {
+          "name": "match_type",
+          "type": "STRING",
+          "description": "Match type e.g. 'EXACT', 'PHRASE', 'BROAD' etc."
+        },
+        {
+          "name": "visitor_country",
+          "type": "STRING",
+          "description": "Country of the Visitor. Differs from the contact's country by including anonymous visitors. For known contacts, this is equal to the contact's country."
+        },
+        {
+          "name": "content_category",
+          "type": "STRING",
+          "description": "Content category of URL associated with the event. The definitions of content categories are setup using the Dreamdata Data Hub UI"
+        },
+        {
+          "name": "is_conversion",
+          "type": "BOOLEAN",
+          "description": "Flag indicating if the event is a conversion. The definitions of conversions are setup using the Dreamdata Data Hub UI"
+        },
+        {
+          "name": "conversion_name",
+          "type": "STRING",
+          "description": "Name of the conversion. The definitions of conversions are setup using the Dreamdata Data Hub UI"
+        },
+        {
+          "name": "is_single_session",
+          "type": "BOOLEAN",
+          "description": "Flag indicating if the event should be considered as a stand-alone session and not be grouped with other events into a session."
+        }
+      ],
+      "description": "Record containing detailed information about the event"
+    },
+    {
+      "name": "session",
+      "type": "RECORD",
+      "fields": [
+        {
+          "name": "channel",
+          "type": "STRING",
+          "description": "Channel of the session. Mapped field: This is either defined at input or mapped combining info from different fields. This is the unified channel label used accross Dreamdata reports i.e. the channel responsible for starting the session containing the event. See Dreamdata Data Hub UI to customize mapping outside of the Dreamdata default mappings"
+        },
+        {
+          "name": "source",
+          "type": "STRING",
+          "description": "Source of the session. Mapped field: This is either defined at input or mapped combining info from different fields like utm_source. This is the unified source label used accross Dreamdata reports i.e. the source responsible for starting the session containing the event. See Dreamdata Data Hub UI to customize mapping outside of the Dreamdata default mappings."
+        },
+        {
+          "name": "campaign",
+          "type": "STRING",
+          "description": "Campaign of the session. Mapped field: This is either defined at input or mapped combining info from different fields like utm_campaign. This is the unified campaign label used accross Dreamdata reports i.e. the campaign responsible for starting the session containing the event."
+        },
+        {
+          "name": "medium",
+          "type": "STRING",
+          "description": "Medium of the session. Mapped field: This is either defined at input or mapped combining info from different fields."
+        },
+        {
+          "name": "term",
+          "type": "STRING",
+          "description": "Term of the session, set using a match with paid UTM parameter IDs or set using utm_term."
+        },
+        {
+          "name": "keyword",
+          "type": "STRING",
+          "description": "Keyword of the session, set using a match with paid UTM parameter IDs."
+        },
+        {
+          "name": "match_type",
+          "type": "STRING",
+          "description": "Match type e.g. 'EXACT', 'PHRASE', 'BROAD' etc"
+        },
+        {
+          "name": "visitor_country",
+          "type": "STRING",
+          "description": "Country of the Visitor of the session. Differs from the contact's country by including anonymous visitors. For known contacts, this is equal to the contact's country."
+        },
+        {
+          "name": "landing_page",
+          "type": "STRING",
+          "description": "Landing page URL of the session without UTM parameters."
+        },
+        {
+          "name": "landing_page_url",
+          "type": "STRING",
+          "description": "Raw landing page URL of the session including UTM parameters."
+        },
+        {
+          "name": "landing_page_content_category",
+          "type": "STRING",
+          "description": "Content category of the landing page URL of the session. The definitions of content categories are setup using the Dreamdata Data Hub UI"
+        },
+        {
+          "name": "host",
+          "type": "STRING",
+          "description": "Domain of the landing page URL of the session."
+        },
+        {
+          "name": "referrer_clean",
+          "type": "STRING",
+          "description": "Cleaned referrer URL of the session without UTM parameters."
+        },
+        {
+          "name": "referrer",
+          "type": "STRING",
+          "description": "Raw referrer URL of the session including UTM parameters."
+        },
+        {
+          "name": "browser",
+          "type": "STRING",
+          "description": "Browser used to start the session."
+        },
+        {
+          "name": "device",
+          "type": "STRING",
+          "description": "Device type used to start the session."
+        },
+        {
+          "name": "os",
+          "type": "STRING",
+          "description": "Operating system used to start the session."
+        },
+        {
+          "name": "first_event_name",
+          "type": "STRING",
+          "description": "Name of the first event in the session."
+        },
+        {
+          "name": "contain_conversion",
+          "type": "BOOLEAN",
+          "description": "Flag indicating if the session contains an event labeled as a conversion. The definitions of conversions are setup using the Dreamdata Data Hub UI"
+        },
+        {
+          "name": "first_conversion_name",
+          "type": "STRING",
+          "description": "Name of the first conversion in the session. The definitions of conversions are setup using the Dreamdata Data Hub UI"
+        },
+        {
+          "name": "spend_source",
+          "type": "STRING",
+          "description": "The source of the spend associated with this session. Is a reference to the source column in the spend table"
+        },
+        {
+          "name": "spend_type",
+          "type": "STRING",
+          "description": "The type of the spend associated with this session. Is a reference to the source_system.type column in the spend table"
+        },
+        {
+          "name": "spend_data_source",
+          "type": "STRING",
+          "description": "The data source of the spend associated with this session. Is a reference to the source_system.source column in the spend table"
+        },
+        {
+          "name": "dd_brand_search_label",
+          "type": "STRING",
+          "description": "Branded search label i.e. 'Brand', 'Non-Brand', defined in the Dreamdata platform. Is a reference to the dd_brand_search_labelcolumn in the spend table"
+        },
+        {
+          "name": "google_advertising_channel",
+          "type": "STRING",
+          "description": "Google advertising channel type from Google's network/campaign classification e.g. 'Search', 'Display', 'Video', 'Demand_Gen'. Is a reference to the google_advertising_channel column in the spend table"
+        },
+        {
+          "name": "ad_hierarchy",
+          "type": "RECORD",
+          "fields": [
+            {
+              "name": "ad_account",
+              "type": "RECORD",
+              "fields": [
+                {
+                  "name": "name",
+                  "type": "STRING",
+                  "description": "Name of the ad account"
+                },
+                {
+                  "name": "id",
+                  "type": "STRING",
+                  "description": "Unique identifier for the ad account within the network"
+                }
+              ],
+              "description": "Record containing information about the ad account"
+            },
+            {
+              "name": "level_1",
+              "type": "RECORD",
+              "fields": [
+                {
+                  "name": "network_label",
+                  "type": "STRING",
+                  "description": "Network-specific label for the first level i.e. 'campaign' for Google, Meta, and LinkedIn."
+                },
+                {
+                  "name": "name",
+                  "type": "STRING",
+                  "description": "Name of the first level i.e. the name of the Google campaign."
+                },
+                {
+                  "name": "id",
+                  "type": "STRING",
+                  "description": "Unique identifier for the first level within the network."
+                }
+              ],
+              "description": "Top level for ads on the specific network"
+            },
+            {
+              "name": "level_2",
+              "type": "RECORD",
+              "fields": [
+                {
+                  "name": "network_label",
+                  "type": "STRING",
+                  "description": "Network-specific label for the second level i.e. 'ad group' for Google, 'ad set' for Meta and LinkedIn."
+                },
+                {
+                  "name": "name",
+                  "type": "STRING",
+                  "description": "Name of the second level i.e. the name of the Google ad group."
+                },
+                {
+                  "name": "id",
+                  "type": "STRING",
+                  "description": "Unique identifier for the second level within the network."
+                }
+              ],
+              "description": "Second level for ads on the specific network"
+            }
+          ],
+          "description": "Record containing information about the ad hierarchy detected, with specific network labels and IDs: These are filled in using matches with UTM parameters of the session. The id's in this record can be connected to the similar record in the spend table."
+        }
+      ],
+      "description": "Record containing detailed information about the session which the event is part of. The session will be the same for all events in the session. Attribution is based on session parameters."
+    },
+    {
+      "name": "source_system",
+      "type": "RECORD",
+      "fields": [
+        {
+          "name": "id",
+          "type": "STRING",
+          "description": "Id for the event in the source system. For analytics sources this will be the message identifier."
+        },
+        {
+          "name": "source",
+          "type": "STRING",
+          "description": "Name of the source system of the event."
+        }
+      ],
+      "description": "Record containing information about the source of the data"
+    },
+    {
+      "name": "signals",
+      "type": "RECORD",
+      "mode": "REPEATED",
+      "fields": [
+        {
+          "name": "id",
+          "type": "STRING",
+          "description": "Unique identifier for the signal."
+        },
+        {
+          "name": "name",
+          "type": "STRING",
+          "description": "Name of the signal."
+        },
+        {
+          "name": "category",
+          "type": "STRING",
+          "description": "Category of the signal."
+        },
+        {
+          "name": "used_in_engagement_score",
+          "type": "BOOLEAN",
+          "description": "Boolean flag indicating if the signal is used to calculate the Dreamdata engagement score."
+        }
+      ],
+      "description": "Array containing the signals associated with this event. The signal definitions are setup using the Dreamdata App."
+    },
+    {
+      "name": "stages",
+      "type": "RECORD",
+      "mode": "REPEATED",
+      "fields": [
+        {
+          "name": "dd_stage_id",
+          "type": "STRING",
+          "description": "Unique identifier for the individual stage influenced by the event. (foreign key referencing dd_stage_id in the stages schema)."
+        },
+        {
+          "name": "name",
+          "type": "STRING",
+          "description": "Name of the stage."
+        },
+        {
+          "name": "timestamp",
+          "type": "TIMESTAMP",
+          "description": "Timestamp when the stage was reached."
+        },
+        {
+          "name": "value",
+          "type": "FLOAT",
+          "description": "Value indicating the revenue associated with reaching the stage."
+        }
+      ],
+      "description": "Array containing the stages that are influenced by the event = where the event is part of that particular stage journey. An event cannot influence a stage reached before the timestamp of the event. This array is used for performance analysis i.e. 'what did this event lead to' or 'which funnel stage is influenced by this event'. This can be accomplished by unnesting the stages array and count distinct dd_stage_id's i.e. for how many stages (dd_stage_id) are the event part of the stage journey."
+    },
+    {
+      "name": "row_checksum",
+      "type": "STRING",
+      "description": "Checksum for the row. If any value in the row changes, the checksum changes otherwise it is unchanged. This should be only used to setup incremental table updates."
+    }
+  ],
+  "spend": [
+    {
+      "name": "timestamp",
+      "type": "TIMESTAMP",
+      "description": "Date and time the cost was incurred"
+    },
+    {
+      "name": "cost",
+      "type": "FLOAT",
+      "description": "Amount recorded in the currency set in the Dreamdata platform."
+    },
+    {
+      "name": "impressions",
+      "type": "FLOAT",
+      "description": "Number of ad impressions."
+    },
+    {
+      "name": "clicks",
+      "type": "FLOAT",
+      "description": "Number of ad clicks."
+    },
+    {
+      "name": "adNetwork",
+      "type": "STRING",
+      "description": "Name of the advertising network used like 'Google', 'LinkedIn' etc (Deprecated: use source for the origin of the spend)"
+    },
+    {
+      "name": "channel",
+      "type": "STRING",
+      "description": "Channel referencing the session channel in events and attribution table. This can be used to match spend to activity."
+    },
+    {
+      "name": "source",
+      "type": "STRING",
+      "description": "Source referencing the session.spend_source in events and attribution table. This can be used to match spend to activity."
+    },
+    {
+      "name": "ad_account",
+      "type": "RECORD",
+      "fields": [
+        {
+          "name": "id",
+          "type": "STRING",
+          "description": "Unique identifier for the ad account within the network"
+        },
+        {
+          "name": "name",
+          "type": "STRING",
+          "description": "Name of the ad account"
+        }
+      ],
+      "description": "Record containing information about the ad account used for the spend"
+    },
+    {
+      "name": "ad_hierarchy",
+      "type": "RECORD",
+      "fields": [
+        {
+          "name": "level_1",
+          "type": "RECORD",
+          "fields": [
+            {
+              "name": "network_label",
+              "type": "STRING",
+              "description": "Network-specific label for the first level i.e. 'campaign' for Google, Meta, and LinkedIn."
+            },
+            {
+              "name": "name",
+              "type": "STRING",
+              "description": "Name of the first level i.e. the name of the Google campaign."
+            },
+            {
+              "name": "id",
+              "type": "STRING",
+              "description": "Unique identifier for the first level within the network."
+            }
+          ],
+          "description": "Top level for ads on the specific network"
+        },
+        {
+          "name": "level_2",
+          "type": "RECORD",
+          "fields": [
+            {
+              "name": "network_label",
+              "type": "STRING",
+              "description": "Network-specific label for the second level i.e. 'ad group' for Google, 'ad set' for Meta and LinkedIn."
+            },
+            {
+              "name": "name",
+              "type": "STRING",
+              "description": "Name of the second level i.e. the name of the Google ad group."
+            },
+            {
+              "name": "id",
+              "type": "STRING",
+              "description": "Unique identifier for the second level within the network."
+            }
+          ],
+          "description": "Second level for ads on the specific network"
+        },
+        {
+          "name": "level_3",
+          "type": "RECORD",
+          "fields": [
+            {
+              "name": "network_label",
+              "type": "STRING",
+              "description": "Network-specific label for the third level i.e. 'meta ad' for Meta, 'linkedin ad' for LinkedIn, 'google ad keyword id' for Google."
+            },
+            {
+              "name": "name",
+              "type": "STRING",
+              "description": "Name of the third level i.e. the ad name or keyword text."
+            },
+            {
+              "name": "id",
+              "type": "STRING",
+              "description": "Unique identifier for the third level within the network."
+            }
+          ],
+          "description": "Most specific level the platform exposes \u2014 ad / creative, keyword, etc."
+        }
+      ],
+      "description": "Record containing information about the ad hierarchy, with specific network labels and IDs: The IDs are used to match activities and ad, through things like UTM parameters of the activities"
+    },
+    {
+      "name": "context",
+      "type": "RECORD",
+      "fields": [
+        {
+          "name": "campaign",
+          "type": "STRING",
+          "description": "Name of the campaign"
+        },
+        {
+          "name": "campaign_id",
+          "type": "STRING",
+          "description": "Unique identifier for the campaign within the network"
+        },
+        {
+          "name": "keyword",
+          "type": "STRING",
+          "description": "Keyword used in the ad if applicable"
+        },
+        {
+          "name": "keyword_id",
+          "type": "STRING",
+          "description": "Unique identifier for the keyword within the network."
+        },
+        {
+          "name": "match_type",
+          "type": "STRING",
+          "description": "Matching type used for the keyword if applicable"
+        },
+        {
+          "name": "dd_brand_search_label",
+          "type": "STRING",
+          "description": "Branded search label i.e. 'Brand', 'Non-Brand', defined in the Dreamdata platform"
+        },
+        {
+          "name": "google_advertising_channel",
+          "type": "STRING",
+          "description": "Google advertising channel type from Google's network/campaign classification e.g. 'Search', 'Display', 'Video', 'Demand_Gen'"
+        }
+      ],
+      "description": "Record containing campaign and keyword parameters of the spend"
+    },
+    {
+      "name": "source_system",
+      "type": "RECORD",
+      "fields": [
+        {
+          "name": "type",
+          "type": "STRING",
+          "description": "Type of data source like 'advertisement'."
+        },
+        {
+          "name": "source",
+          "type": "STRING",
+          "description": "Name of the data source."
+        }
+      ],
+      "description": "Record containing information about the source of the spend data"
+    },
+    {
+      "name": "row_checksum",
+      "type": "STRING",
+      "description": "Checksum for the row. If any value in the row changes, the checksum changes otherwise it is unchanged. This should only be used to setup incremental table updates."
+    }
+  ],
+  "stages": [
+    {
+      "name": "dd_stage_id",
+      "type": "STRING",
+      "description": "Unique identifier for each stage entry within the Dreamdata data model. (Primary key)"
+    },
+    {
+      "name": "stage_name",
+      "type": "STRING",
+      "description": "Name of the stage"
+    },
+    {
+      "name": "stage_model_id",
+      "type": "STRING",
+      "description": "Unique identifier of the stage."
+    },
+    {
+      "name": "dd_object_id",
+      "type": "STRING",
+      "description": " Identifier for the object the stage is built on. This could be the id of the deal or opportunity the stage is built on. The dd_object_id is unique within each stage, but is not globally unique. Relationship with dd_stage_id: dd_stage_id is the combination of stage_name and dd_object_id"
+    },
+    {
+      "name": "dd_company_id",
+      "type": "STRING",
+      "description": "Unique identifier for the company associated with the stage (foreign key referencing dd_company_id in the company schema). Can be null if no company is associated with the stage."
+    },
+    {
+      "name": "timestamp",
+      "type": "TIMESTAMP",
+      "description": "Timestamp when the stage was reached - not nullable"
+    },
+    {
+      "name": "value",
+      "type": "FLOAT",
+      "description": "Value indicating the revenue or similar value associated with reaching the stage."
+    },
+    {
+      "name": "primary_owner",
+      "type": "RECORD",
+      "fields": [
+        {
+          "name": "id",
+          "type": "STRING",
+          "description": "Unique identifier for the owner"
+        },
+        {
+          "name": "name",
+          "type": "STRING",
+          "description": "Owner's name"
+        },
+        {
+          "name": "email",
+          "type": "STRING",
+          "description": "Owner's email address."
+        }
+      ],
+      "description": "Record containing details about the owner in the source integration"
+    },
+    {
+      "name": "journey",
+      "type": "RECORD",
+      "fields": [
+        {
+          "name": "type",
+          "type": "STRING",
+          "description": "Type of the journey. This determines which events are part of the stage journey. The type is set using the Dreamdata Data Hub UI. 'contact level': all activity associated with the contact (see dd_primary_contact_id) of the stage. 'company level': all activity associated with the company (see dd_company_id) of the stage. 'opportunity level': contacts on the opportunity (see object_contacts)"
+        },
+        {
+          "name": "start_date",
+          "type": "TIMESTAMP",
+          "description": "Start date of the stage journey. If NULL the journey includes all tracked data e.g. start date is the first tracked data."
+        },
+        {
+          "name": "end_date",
+          "type": "TIMESTAMP",
+          "description": "End date of the stage journey. If this is NULL the stage timestamp is the end date of the stage journey."
+        }
+      ],
+      "description": "Record containing details about the journey settings for the stage. The settings are controled from the Dreamdata Data Hub UI."
+    },
+    {
+      "name": "dd_primary_contact_id",
+      "type": "STRING",
+      "description": "Unique identifier for a single contact associated with the stage. This is only available for stages built on objects that have a single email associated with it like contacts or leads. (foreign key referencing dd_contact_id in the contacts schema)"
+    },
+    {
+      "name": "object_contacts",
+      "type": "RECORD",
+      "mode": "REPEATED",
+      "fields": [
+        {
+          "name": "dd_contact_id",
+          "type": "STRING",
+          "description": "Unique identifier for the contact associated with the stage (foreign key referencing dd_contact_id in the contacts schema)"
+        }
+      ],
+      "description": "Array containing details about all contacts on the object the stage is built on (can be empty). This is only available for stages built on objects that can have multiple email associated with it, like salesforce opportunities"
+    },
+    {
+      "name": "custom_properties",
+      "type": "JSON",
+      "description": "Custom stage properties in JSON format. These are selected properties from the object the stage is built on. If the stage is built on opportunities, it will contain properties selected from the opportunity object and if it is built on contacts it will contain properties selected from the contacts object. Which properties are included for each object is controlled through the Dreamdata source UI for the source of the object."
+    },
+    {
+      "name": "source_system",
+      "type": "RECORD",
+      "fields": [
+        {
+          "name": "id",
+          "type": "STRING",
+          "description": "Id for the object record in the source system."
+        },
+        {
+          "name": "source",
+          "type": "STRING",
+          "description": "Name of the source system like hubspot, salesforce, etc."
+        },
+        {
+          "name": "object",
+          "type": "STRING",
+          "description": "The name of the object in the source system like contacts, leads, deals, opportunities etc."
+        }
+      ],
+      "description": "Array containing information about the source systems for the object the stage is built on"
+    },
+    {
+      "name": "stage_transitions",
+      "type": "RECORD",
+      "mode": "REPEATED",
+      "fields": [
+        {
+          "name": "dd_stage_id",
+          "type": "STRING",
+          "description": "Unique identifier for the stage transitioned to"
+        },
+        {
+          "name": "dd_object_id",
+          "type": "STRING",
+          "description": "Identifier for the object for the stage transitioned to"
+        },
+        {
+          "name": "name",
+          "type": "STRING",
+          "description": "Name of the stage transitioned to"
+        },
+        {
+          "name": "timestamp",
+          "type": "TIMESTAMP",
+          "description": "Time of the stage transitioned to"
+        }
+      ],
+      "description": "Array containing transitions between this stage and other stages. All stages in the array are reached after the this stage, by the same company or contact (depending on the type of stage). This is used for conversion rate calculations as all connected stages are pre-calculated depending on their specific types and can be accessed simply using the stage_transitions array"
+    },
+    {
+      "name": "row_checksum",
+      "type": "STRING",
+      "description": "Checksum for the row. If any value in the row changes, the checksum changes otherwise it is unchanged. This should only used to setup incremental table updates."
+    }
+  ]
+}

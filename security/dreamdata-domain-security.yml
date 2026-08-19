@@ -1,4 +1,4 @@
-generated: '2026-07-18'
+generated: '2026-08-13'
 method: probed
 source: live DNS/TLS/HTTP probes of apis.yml + OpenAPI hosts
 hosts:
@@ -11,7 +11,7 @@ hosts:
 - host: developer.dreamdata.io
   https: true
   tls_version: TLSv1.3
-  cert_expires: Aug 29 18:32:18 2026 GMT
+  cert_expires: Oct 29 03:11:49 2026 GMT
   hsts: false
 - host: api.dreamdata.cloud
   https: true

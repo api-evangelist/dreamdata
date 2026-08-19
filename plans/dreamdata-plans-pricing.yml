@@ -1,0 +1,87 @@
+generated: '2026-08-13'
+method: searched
+source: https://dreamdata.io/pricing
+checked: '2026-08-13'
+currency: USD
+billing_metric: monthly tracked users (MTUs)
+billing_metric_note: >-
+  "It's the number of unique monthly tracked users on all your different go-to-market assets,
+  such as your website, marketing automation system, etc." — pricing FAQ.
+plan_count: 2
+plans:
+- name: Starter
+  label_on_page: Starter / Dreamdata Free
+  price: 0
+  currency: USD
+  period: month
+  price_display: "$0/month"
+  audience: smaller teams
+  cta: Start now
+  credit_card_required: false
+  credit_card_note: >-
+    "No. Dreamdata will be completely free until you exceed the FREE monthly tracked user limit
+    or decide to upgrade your plan."
+  limits:
+    user_history: 2 months
+    seats: 5
+    stage_models: 3
+    notifications: 2
+    syncs: 1
+    monthly_tracked_users: not published
+  included:
+  - B2B Web Analytics
+  - Cookie & Cookie-less Tracking
+  - Engagement Scoring
+  - Company Identification
+  - Audience Builder
+  - Slack/Teams Notifications
+  - Ad Spend Report
+  - B2B Benchmarks
+  support:
+  - Self-Serve Onboarding
+  - Slack Community
+  - AI Chat
+- name: Advanced
+  label_on_page: Advanced — Activation & Attribution
+  price: null
+  currency: USD
+  period: null
+  price_display: Custom Pricing
+  audience: larger teams
+  cta: Get a demo
+  trial: Guided free trial available
+  limits:
+    note: "Custom Limits & Volumes tailored to your needs — no published numbers."
+  included:
+  - AI Activation
+  - Advanced and custom attribution models
+  - Revenue and content analytics
+  - Custom reporting on ROI/ROAS
+  - AI-Powered Report Summaries
+  - Advanced Data Controls
+  - Audience activation to all major ad platforms
+  - Sales notifications on highly engaged accounts
+  advanced_data_controls:
+  - Event Builder
+  - Custom UTM Mapping
+  - Data Model Scheduler
+  - Custom Data Sources
+  - Multiple Business Units
+  - SSO & SAML login
+  support:
+  - Full Onboarding
+  - Dedicated CSM
+  - Dedicated Technical Manager
+  - Solutions Consulting
+  - Data Science Support
+api_access:
+  note: >-
+    Pricing is packaged by platform capability, not by API. The pricing page does not price or
+    gate the Event Tracking API, the outbound webhook syncs or the MCP server separately, and
+    does not say which tier the MCP server requires — the MCP docs only state it must be
+    "enabled for this user" by the account owner. Free-tier "Syncs: 1" is the only published
+    limit that touches the outbound webhook surface.
+notes: >-
+  Two tiers only: a genuinely self-serve free plan with published numeric limits, and a
+  contact-sales tier with no published price. No published per-seat rate, no overage rate, and
+  no MTU thresholds — so the money question above the free tier is a sales conversation.
