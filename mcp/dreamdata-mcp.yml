@@ -138,3 +138,20 @@ notes: Official hosted/remote MCP server, one URL for every account, with per-re
   is a remote agent surface, reachable today by any OAuth 2.1 + S256 client. The tool catalog above is
   transcribed from the provider's published tool tables; the live tools/list schemas are auth-gated (401)
   and would need an authenticated introspection to capture.
+rfc9728:
+  endpoint: https://mcp.dreamdata.io/mcp
+  metadata_url: https://mcp.dreamdata.io/.well-known/oauth-protected-resource/mcp
+  discovered_via: WWW-Authenticate resource_metadata on an anonymous POST initialize
+  fetched: '2026-09-25'
+  http_status: 200
+  content_type: application/json
+  document:
+    resource: https://mcp.dreamdata.io/mcp
+    authorization_servers:
+    - https://authenticate.dreamdata.io/oauth/2.1
+    scopes_supported:
+    - read
+    - reports:write
+    - audiences:write
+    bearer_methods_supported:
+    - header
