@@ -92,3 +92,64 @@
   relationship: platform-app
   status: not-a-workflow
   arazzo: null
+- slug: dreamdata-go-module-proxy
+  label: Go module proxy
+  partner_name: Go module proxy
+  category: official SDK (Go)
+  type: register
+  channel: package-registry
+  evidence: https://pkg.go.dev/github.com/dreamdata-io/analytics-go
+  source: edge
+  relationship: distribution-channel
+  contract_reference:
+    register: Go module proxy (public registry JSON)
+    spec_file: null
+    language: Go
+    packages:
+    - name: github.com/dreamdata-io/analytics-go
+      version: v2.0.0+incompatible
+      released: '2015-02-03'
+      released_field: Time
+      lapsed: true
+      page: https://pkg.go.dev/github.com/dreamdata-io/analytics-go
+      repo_leg: github-org:dreamdata-io
+      publisher_leg: org:dreamdata-io
+      matched_by: github-org
+    current: false
+    signal_note: 'an official package on the registry: distribution, not an integration; lapsed = no release in
+      24 months'
+    detected_by: sweep-official-sdks.py
+    detected: '2026-10-18'
+  status: not-a-workflow
+  arazzo: null
+- slug: dreamdata-npm-registry
+  label: npm registry
+  partner: npm
+  partner_name: npm registry
+  category: official SDK (JavaScript/TypeScript)
+  type: register
+  channel: package-registry
+  evidence: https://www.npmjs.com/package/@dreamdata/analytics-next
+  source: edge
+  relationship: distribution-channel
+  contract_reference:
+    register: npm registry (public registry JSON)
+    spec_file: null
+    language: JavaScript/TypeScript
+    packages:
+    - name: '@dreamdata/analytics-next'
+      version: 2.0.4
+      released: '2024-09-16'
+      released_field: modified
+      lapsed: true
+      page: https://www.npmjs.com/package/@dreamdata/analytics-next
+      repo_leg: github-org:dreamdata-io
+      publisher_leg: email:dreamdata.io
+      matched_by: domain
+    current: false
+    signal_note: 'an official package on the registry: distribution, not an integration; lapsed = no release in
+      24 months'
+    detected_by: sweep-official-sdks.py
+    detected: '2026-10-18'
+  status: not-a-workflow
+  arazzo: null
