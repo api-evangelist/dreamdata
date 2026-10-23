@@ -192,6 +192,34 @@
     detected: '2026-10-21'
   status: not-a-workflow
   arazzo: null
+- slug: dreamdata-amazon-ads-partner-directory-technology
+  label: Amazon Ads (partner directory, technology)
+  partner: amazon
+  partner_name: Amazon Ads (partner directory, technology)
+  type: marketplace
+  marketplace: own
+  channel: partner-built
+  evidence: https://advertising.amazon.com/partners/directory
+  source: edge
+  relationship: platform-app
+  contract_reference:
+    register: Amazon Ads Partner Directory (advertising.amazon.com/partners/directory, GetPartners)
+    registered_name: Dreamdata
+    register_id: amzn1.ads1.ma1.bwkdybrosx7yrjggvfjudfvf5
+    matched_domain: dreamdata.io
+    matched_by: domain
+    services: []
+    ads_products:
+    - SPONSORED_DISPLAY
+    service_models:
+    - SELF_SERVICE
+    - SERVICE
+    signal_note: listing = participation; accreditation recorded as partner_tier; ads_certifications are Amazon
+      Ads LEARNING certifications held by staff, not product conformance, never certified_products
+    detected_by: sweep-amazon-sp-api-appstore.py
+    detected: '2026-10-21'
+  status: not-a-workflow
+  arazzo: null
 - slug: dreamdata-microsoft-teams-own
   label: Microsoft Teams (own)
   partner: microsoft-teams
@@ -231,31 +259,16 @@
   relationship: platform-app
   status: not-a-workflow
   arazzo: null
-- slug: dreamdata-amazon-ads-partner-directory-technology
-  label: Amazon Ads (partner directory, technology)
-  partner: amazon
-  partner_name: Amazon Ads (partner directory, technology)
+- slug: dreamdata-intercom-own
+  label: Intercom (own)
+  partner: intercom
+  partner_name: Intercom (own)
+  category: Analytics
   type: marketplace
   marketplace: own
   channel: partner-built
-  evidence: https://advertising.amazon.com/partners/directory
+  evidence: https://www.intercom.com/app-store/?app_package_code=dreamdata-io-i8oi
   source: edge
   relationship: platform-app
-  contract_reference:
-    register: Amazon Ads Partner Directory (advertising.amazon.com/partners/directory, GetPartners)
-    registered_name: Dreamdata
-    register_id: amzn1.ads1.ma1.bwkdybrosx7yrjggvfjudfvf5
-    matched_domain: dreamdata.io
-    matched_by: domain
-    services: []
-    ads_products:
-    - SPONSORED_DISPLAY
-    service_models:
-    - SELF_SERVICE
-    - SERVICE
-    signal_note: listing = participation; accreditation recorded as partner_tier; ads_certifications are Amazon
-      Ads LEARNING certifications held by staff, not product conformance, never certified_products
-    detected_by: sweep-amazon-sp-api-appstore.py
-    detected: '2026-10-21'
   status: not-a-workflow
   arazzo: null

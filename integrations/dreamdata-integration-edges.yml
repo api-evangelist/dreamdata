@@ -203,6 +203,39 @@ edges:
     detected: '2026-10-21'
   detected_by: sweep-hubspot-app-marketplace.py
   first_seen: '2026-10-21'
+- partner_name: Amazon Ads (partner directory, technology)
+  partner: amazon
+  partner_match: mirror
+  mirror_match: domain
+  type: marketplace
+  relationship: platform-app
+  direction: third-party
+  channel: partner-built
+  marketplace: own
+  evidence: https://advertising.amazon.com/partners/directory
+  mirror_of: amazon/integrations/amazon-integration-edges.yml
+  apps:
+  - Dreamdata
+  contract_reference:
+    register: Amazon Ads Partner Directory (advertising.amazon.com/partners/directory, GetPartners)
+    registered_name: Dreamdata
+    register_id: amzn1.ads1.ma1.bwkdybrosx7yrjggvfjudfvf5
+    matched_domain: dreamdata.io
+    matched_by: domain
+    services: []
+    ads_products:
+    - SPONSORED_DISPLAY
+    service_models:
+    - SELF_SERVICE
+    - SERVICE
+    signal_note: listing = participation; accreditation recorded as partner_tier; ads_certifications are Amazon
+      Ads LEARNING certifications held by staff, not product conformance, never certified_products
+    detected_by: sweep-amazon-sp-api-appstore.py
+    detected: '2026-10-21'
+  detected: '2026-10-21'
+  detected_by: sweep-amazon-sp-api-appstore.py
+  partner_tier:
+  - PARTNER
 - partner_name: Microsoft Teams (own)
   partner: microsoft-teams
   partner_match: mirror
@@ -256,8 +289,8 @@ edges:
   detected: '2026-10-21'
   detected_by: mirror-platform-listings.py
   category: MARKETING_ANALYTICS
-- partner_name: Amazon Ads (partner directory, technology)
-  partner: amazon
+- partner_name: Intercom (own)
+  partner: intercom
   partner_match: mirror
   mirror_match: domain
   type: marketplace
@@ -265,30 +298,14 @@ edges:
   direction: third-party
   channel: partner-built
   marketplace: own
-  evidence: https://advertising.amazon.com/partners/directory
-  mirror_of: amazon/integrations/amazon-integration-edges.yml
+  evidence: https://www.intercom.com/app-store/?app_package_code=dreamdata-io-i8oi
+  mirror_of: intercom/integrations/intercom-integration-edges.yml
   apps:
   - Dreamdata
-  contract_reference:
-    register: Amazon Ads Partner Directory (advertising.amazon.com/partners/directory, GetPartners)
-    registered_name: Dreamdata
-    register_id: amzn1.ads1.ma1.bwkdybrosx7yrjggvfjudfvf5
-    matched_domain: dreamdata.io
-    matched_by: domain
-    services: []
-    ads_products:
-    - SPONSORED_DISPLAY
-    service_models:
-    - SELF_SERVICE
-    - SERVICE
-    signal_note: listing = participation; accreditation recorded as partner_tier; ads_certifications are Amazon
-      Ads LEARNING certifications held by staff, not product conformance, never certified_products
-    detected_by: sweep-amazon-sp-api-appstore.py
-    detected: '2026-10-21'
-  detected: '2026-10-21'
-  detected_by: sweep-amazon-sp-api-appstore.py
-  partner_tier:
-  - PARTNER
+  listing_count: 1
+  detected: '2026-10-23'
+  detected_by: mirror-platform-listings.py
+  category: Analytics
 method: searched
 checked:
 - https://api.nuget.org/v3
@@ -314,4 +331,5 @@ checked:
 - https://advertising.amazon.com/partners/directory
 - https://sellercentral.amazon.com/gspn
 - https://sellercentral.amazon.com/selling-partner-appstore
+- intercom/integrations/intercom-integration-edges.yml
 source: https://www.twilio.com/docs/segment/connections/destinations/catalog/dreamdata-io
